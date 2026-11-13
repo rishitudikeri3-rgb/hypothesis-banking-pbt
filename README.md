@@ -11,11 +11,19 @@ Hypothesis then generates hundreds of inputs, including edge cases, to try to br
 failure, it **shrinks** the input to the simplest one that still fails. This project shows a banking module that
 passes all 15 hand-written PyTest tests while hiding 6 bugs, and Hypothesis finds every one of them automatically.
 
+![Bugs detected per suite](results/chart1_bugs_detected.png)
+
+- **Full report:** [`report/Software_Testing_Project_Report.docx`](report/Software_Testing_Project_Report.docx)
+- **Presentation notes** (results, 2-minute script, code walkthrough, viva Q&A): [`docs/PRESENTATION_NOTES.md`](docs/PRESENTATION_NOTES.md)
+- **Raw results:** [`results/metrics.json`](results/metrics.json) and the `results/*.txt` pytest outputs
+
 ## Project layout
 
 ```
 property-based-testing-project/
 ├── README.md
+├── docs/
+│   └── PRESENTATION_NOTES.md  # results summary, 2-minute script, code walkthrough, viva Q&A
 ├── requirements.txt
 ├── pytest.ini                 # tells pytest to look in src/ for `import bank`
 ├── src/
