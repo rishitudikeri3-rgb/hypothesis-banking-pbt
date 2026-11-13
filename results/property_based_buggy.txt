@@ -1,0 +1,504 @@
+$ BANK_VERSION=buggy pytest tests/test_property_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\Users\rishi\property-based-testing-project\results\property_based_buggy.xml
+
+============================= test session starts =============================
+platform win32 -- Python 3.14.6, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\rishi\property-based-testing-project\.venv\Scripts\python.exe
+hypothesis profile 'project' -> database=None, deadline=None
+rootdir: C:\Users\rishi\property-based-testing-project
+configfile: pytest.ini
+plugins: hypothesis-6.170.15
+collecting ... collected 10 items
+
+tests/test_property_based.py::test_deposit_then_withdraw_is_round_trip FAILED [ 10%]
+tests/test_property_based.py::test_balance_always_has_at_most_two_decimal_places FAILED [ 20%]
+tests/test_property_based.py::test_deposit_of_zero_or_negative_is_rejected FAILED [ 30%]
+tests/test_property_based.py::test_withdraw_of_negative_amount_is_rejected FAILED [ 40%]
+tests/test_property_based.py::test_balance_never_negative_after_withdraw FAILED [ 50%]
+tests/test_property_based.py::test_overdraft_of_one_rupee_or_more_is_rejected PASSED [ 60%]
+tests/test_property_based.py::test_interest_never_decreases_balance FAILED [ 70%]
+tests/test_property_based.py::test_interest_is_rounded_to_nearest_paisa FAILED [ 80%]
+tests/test_property_based.py::test_transfer_conserves_total_money FAILED [ 90%]
+tests/test_property_based.py::test_transfer_to_self_leaves_balance_unchanged FAILED [100%]
+
+================================== FAILURES ===================================
+__________________ test_deposit_then_withdraw_is_round_trip ___________________
+
+    @settings(max_examples=200)
+>   @given(start=money, amount=positive_money)
+                   ^^^
+
+tests\test_property_based.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.01'), amount = Decimal('0.02')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=positive_money)
+    def test_deposit_then_withdraw_is_round_trip(start, amount):
+        """Depositing an amount and then withdrawing the same amount leaves the balance exactly where it started.
+        Strategy: start = decimals 0.00..10000.00 (2 dp); amount = decimals 0.01..10000.00 (2 dp)
+        Targets: BUG-1
+        """
+        acc = Account("A1", "Test", start)
+        acc.deposit(amount)
+        acc.withdraw(amount)
+>       assert as_decimal(acc.get_balance()) == start
+E       AssertionError: assert Decimal('0.009999999999999998') == Decimal('0.01')
+E        +  where Decimal('0.009999999999999998') = as_decimal(0.009999999999999998)
+E        +    where 0.009999999999999998 = get_balance()
+E        +      where get_balance = <bank_buggy.Account object at 0x0000020E227EF1D0>.get_balance
+E       Failing test case: test_deposit_then_withdraw_is_round_trip(
+E           start=Decimal('0.01'),
+E           amount=Decimal('0.02'),
+E       )
+
+tests\test_property_based.py:61: AssertionError
+_____________ test_balance_always_has_at_most_two_decimal_places ______________
+
+    @settings(max_examples=200)
+>   @given(deposits=st.lists(positive_money, min_size=1, max_size=20))
+                   ^^^
+
+tests\test_property_based.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+deposits = [Decimal('0.01'), Decimal('2.01')]
+
+    @settings(max_examples=200)
+    @given(deposits=st.lists(positive_money, min_size=1, max_size=20))
+    def test_balance_always_has_at_most_two_decimal_places(deposits):
+        """After any sequence of deposits the balance has at most 2 decimal places (whole paise).
+        Strategy: list of 1-20 deposits, each decimals 0.01..10000.00 (2 dp)
+        Targets: BUG-1
+        """
+        acc = Account("A1", "Test", 0)
+        for amount in deposits:
+            acc.deposit(amount)
+        balance = as_decimal(acc.get_balance())
+>       assert balance == balance.quantize(CENT)
+E       AssertionError: assert Decimal('2.0199999999999996') == Decimal('2.02')
+E        +  where Decimal('2.02') = <built-in method quantize of decimal.Decimal object at 0x0000020E22A13440>(Decimal('0.01'))
+E        +    where <built-in method quantize of decimal.Decimal object at 0x0000020E22A13440> = Decimal('2.0199999999999996').quantize
+E       Failing test case: test_balance_always_has_at_most_two_decimal_places(
+E           deposits=[Decimal('0.01'), Decimal('2.01')],
+E       )
+
+tests\test_property_based.py:75: AssertionError
+________________ test_deposit_of_zero_or_negative_is_rejected _________________
+
+    @settings(max_examples=200)
+>   @given(start=money, amount=non_positive_money)
+                   ^^^
+
+tests\test_property_based.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.00'), amount = Decimal('0.00')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=non_positive_money)
+    def test_deposit_of_zero_or_negative_is_rejected(start, amount):
+        """Depositing zero or a negative amount always raises ValueError and leaves the balance unchanged.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals -10000.00..0.00 (2 dp)
+        Targets: BUG-6
+        """
+        acc = Account("A1", "Test", start)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+E       Failing test case: test_deposit_of_zero_or_negative_is_rejected(
+E           # The test always failed when commented parts were varied together.
+E           start=Decimal('0.00'),  # or any other generated value
+E           amount=Decimal('0.00'),  # or any other generated value
+E       )
+
+tests\test_property_based.py:86: Failed
+________________ test_withdraw_of_negative_amount_is_rejected _________________
+
+    @settings(max_examples=200)
+>   @given(start=money, amount=negative_money)
+                   ^^^
+
+tests\test_property_based.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.00'), amount = Decimal('-0.01')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=negative_money)
+    def test_withdraw_of_negative_amount_is_rejected(start, amount):
+        """Withdrawing a negative amount always raises ValueError and leaves the balance unchanged.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals -10000.00..-0.01 (2 dp)
+        Targets: BUG-2
+        """
+        acc = Account("A1", "Test", start)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+E       Failing test case: test_withdraw_of_negative_amount_is_rejected(
+E           # The test always failed when commented parts were varied together.
+E           start=Decimal('0.00'),  # or any other generated value
+E           amount=Decimal('-0.01'),  # or any other generated value
+E       )
+
+tests\test_property_based.py:99: Failed
+_________________ test_balance_never_negative_after_withdraw __________________
+
+    @settings(max_examples=300)
+>   @example(start=Decimal("100.00"), amount=Decimal("100.00"))
+                   ^^^
+
+tests\test_property_based.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.00'), amount = Decimal('0.01')
+
+    @settings(max_examples=300)
+    @example(start=Decimal("100.00"), amount=Decimal("100.00"))
+    @given(start=money, amount=positive_money)
+    def test_balance_never_negative_after_withdraw(start, amount):
+        """After any withdrawal attempt (accepted or rejected) the balance is never negative.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00; @example(100, 100)
+        Targets: BUG-3
+        """
+        acc = Account("A1", "Test", start)
+        try:
+            acc.withdraw(amount)
+        except ValueError:
+            pass  # a rejected withdrawal is fine
+>       assert as_decimal(acc.get_balance()) >= 0
+E       AssertionError: assert Decimal('-0.01') >= 0
+E        +  where Decimal('-0.01') = as_decimal(-0.01)
+E        +    where -0.01 = get_balance()
+E        +      where get_balance = <bank_buggy.Account object at 0x0000020E2363B3B0>.get_balance
+E       Failing test case: test_balance_never_negative_after_withdraw(
+E           start=Decimal('0.00'),
+E           amount=Decimal('0.01'),
+E       )
+
+tests\test_property_based.py:120: AssertionError
+____________________ test_interest_never_decreases_balance ____________________
+
+    @settings(max_examples=200)
+>   @given(start=money, rate=any_rate)
+                   ^^^
+
+tests\test_property_based.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.37'), rate = Decimal('-2.71')
+
+    @settings(max_examples=200)
+    @given(start=money, rate=any_rate)
+    def test_interest_never_decreases_balance(start, rate):
+        """Applying interest at any rate either raises ValueError or never decreases the balance.
+        Strategy: start = decimals 0.00..10000.00; rate = decimals -50.00..50.00 (2 dp)
+        Targets: BUG-5
+        """
+        acc = Account("A1", "Test", start)
+        try:
+            acc.apply_interest(rate)
+        except ValueError:
+            pass  # rejecting a negative rate is the correct behaviour
+>       assert as_decimal(acc.get_balance()) >= start
+E       AssertionError: assert Decimal('0.36') >= Decimal('0.37')
+E        +  where Decimal('0.36') = as_decimal(0.36)
+E        +    where 0.36 = get_balance()
+E        +      where get_balance = <bank_buggy.Account object at 0x0000020E234B3830>.get_balance
+E       Failing test case: test_interest_never_decreases_balance(
+E           start=Decimal('0.37'),
+E           rate=Decimal('-2.71'),
+E       )
+
+tests\test_property_based.py:148: AssertionError
+__________________ test_interest_is_rounded_to_nearest_paisa __________________
+
+    @settings(max_examples=200)
+>   @given(start=money, rate=non_negative_rate)
+                   ^^^
+
+tests\test_property_based.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.36'), rate = Decimal('1.39')
+
+    @settings(max_examples=200)
+    @given(start=money, rate=non_negative_rate)
+    def test_interest_is_rounded_to_nearest_paisa(start, rate):
+        """Interest added equals balance x rate / 100, rounded half-up to the nearest paisa.
+        Strategy: start = decimals 0.00..10000.00; rate = decimals 0.00..50.00 (2 dp)
+        Targets: BUG-5
+        """
+        # The expected answer is computed independently with exact Decimal maths.
+        expected = start + (start * rate / 100).quantize(CENT, rounding=ROUND_HALF_UP)
+        acc = Account("A1", "Test", start)
+        acc.apply_interest(rate)
+>       assert as_decimal(acc.get_balance()) == expected
+E       AssertionError: assert Decimal('0.36') == Decimal('0.37')
+E        +  where Decimal('0.36') = as_decimal(0.36)
+E        +    where 0.36 = get_balance()
+E        +      where get_balance = <bank_buggy.Account object at 0x0000020E22EB73B0>.get_balance
+E       Failing test case: test_interest_is_rounded_to_nearest_paisa(
+E           start=Decimal('0.36'),
+E           rate=Decimal('1.39'),
+E       )
+
+tests\test_property_based.py:162: AssertionError
+_____________________ test_transfer_conserves_total_money _____________________
+
+    @settings(max_examples=200)
+>   @given(
+            
+        balances=st.lists(money, min_size=3, max_size=3),
+        sender=st.integers(min_value=0, max_value=2),
+        receiver=st.integers(min_value=0, max_value=2),
+        amount=positive_money,
+    )
+
+tests\test_property_based.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+balances = [Decimal('0.00'), Decimal('0.00'), Decimal('0.01')], sender = 2
+receiver = 2, amount = Decimal('0.01')
+
+    @settings(max_examples=200)
+    @given(
+        balances=st.lists(money, min_size=3, max_size=3),
+        sender=st.integers(min_value=0, max_value=2),
+        receiver=st.integers(min_value=0, max_value=2),
+        amount=positive_money,
+    )
+    def test_transfer_conserves_total_money(balances, sender, receiver, amount):
+        """Any transfer between any two accounts in the bank never changes the bank's total money.
+        Strategy: 3 balances (decimals 0.00..10000.00); sender/receiver = integers 0..2 (may be equal); amount = decimals 0.01..10000.00
+        Targets: BUG-4
+        """
+        bank = Bank()
+        accounts = [bank.open_account(f"ACC{i}", f"Owner{i}", b) for i, b in enumerate(balances)]
+        total_before = as_decimal(bank.total_money())
+        try:
+            accounts[sender].transfer(accounts[receiver], amount)
+        except ValueError:
+            pass  # a rejected transfer must also leave the total unchanged
+>       assert as_decimal(bank.total_money()) == total_before
+E       AssertionError: assert Decimal('0.02') == Decimal('0.01')
+E        +  where Decimal('0.02') = as_decimal(0.02)
+E        +    where 0.02 = total_money()
+E        +      where total_money = <bank_buggy.Bank object at 0x0000020E22C27D40>.total_money
+E       Failing test case: test_transfer_conserves_total_money(
+E           balances=[Decimal('0.00'), Decimal('0.00'), Decimal('0.01')],
+E           sender=2,
+E           receiver=2,
+E           amount=Decimal('0.01'),
+E       )
+
+tests\test_property_based.py:184: AssertionError
+_______________ test_transfer_to_self_leaves_balance_unchanged ________________
+
+    @settings(max_examples=200)
+>   @given(start=money, amount=positive_money)
+                   ^^^
+
+tests\test_property_based.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.01'), amount = Decimal('0.01')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=positive_money)
+    def test_transfer_to_self_leaves_balance_unchanged(start, amount):
+        """Transferring money from an account to itself never changes its balance.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00 (2 dp)
+        Targets: BUG-4
+        """
+        acc = Account("A1", "Test", start)
+        try:
+            acc.transfer(acc, amount)
+        except ValueError:
+            pass  # refusing a self-transfer is acceptable
+>       assert as_decimal(acc.get_balance()) == start
+E       AssertionError: assert Decimal('0.02') == Decimal('0.01')
+E        +  where Decimal('0.02') = as_decimal(0.02)
+E        +    where 0.02 = get_balance()
+E        +      where get_balance = <bank_buggy.Account object at 0x0000020E22DC5D90>.get_balance
+E       Failing test case: test_transfer_to_self_leaves_balance_unchanged(
+E           start=Decimal('0.01'),
+E           amount=Decimal('0.01'),
+E       )
+E       Explanation:
+E           These lines were always and only run by failing test cases:
+E               C:\Users\rishi\property-based-testing-project\src\bank_buggy.py:96
+
+tests\test_property_based.py:199: AssertionError
+- generated xml file: C:\Users\rishi\property-based-testing-project\results\property_based_buggy.xml -
+============================ Hypothesis Statistics ============================
+tests/test_property_based.py::test_deposit_then_withdraw_is_round_trip:
+
+  - during generate phase (0.02 seconds):
+    - Typical runtimes: ~ 0-8 ms, of which ~ 0-1 ms in data generation
+    - 8 passing, 2 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.03 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 11 passing, 8 failing, and 1 invalid test cases
+    - Tried 20 shrinks of which 8 were successful
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_balance_always_has_at_most_two_decimal_places:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which ~ 0-1 ms in data generation
+    - 11 passing, 1 failing, and 2 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.09 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 40 passing, 22 failing, and 0 invalid test cases
+    - Tried 62 shrinks of which 21 were successful
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_deposit_of_zero_or_negative_is_rejected:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 0 passing, 10 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.00 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 0 passing, 1 failing, and 0 invalid test cases
+    - Tried 1 shrinks of which 0 were successful
+
+  - during explain phase (0.38 seconds):
+    - Typical runtimes: ~ 1ms, of which < 1ms in data generation
+    - 0 passing, 287 failing, and 0 invalid test cases
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_withdraw_of_negative_amount_is_rejected:
+
+  - during generate phase (0.02 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 0 passing, 10 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.00 seconds):
+    - Typical runtimes: ~ 1ms, of which < 1ms in data generation
+    - 0 passing, 1 failing, and 0 invalid test cases
+    - Tried 1 shrinks of which 0 were successful
+
+  - during explain phase (0.39 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 0 passing, 278 failing, and 0 invalid test cases
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_balance_never_negative_after_withdraw:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 8 passing, 2 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.00 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 0 passing, 1 failing, and 1 invalid test cases
+    - Tried 2 shrinks of which 0 were successful
+
+  - during explain phase (0.00 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 2 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_overdraft_of_one_rupee_or_more_is_rejected:
+
+  - during generate phase (0.07 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_interest_never_decreases_balance:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 8 passing, 2 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.13 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 70 passing, 31 failing, and 0 invalid test cases
+    - Tried 101 shrinks of which 31 were successful
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_interest_is_rounded_to_nearest_paisa:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 7 passing, 3 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.20 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 87 passing, 56 failing, and 2 invalid test cases
+    - Tried 145 shrinks of which 57 were successful
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_transfer_conserves_total_money:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 6 passing, 4 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.06 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 23 passing, 5 failing, and 15 invalid test cases
+    - Tried 43 shrinks of which 5 were successful
+
+  - during explain phase (0.00 seconds):
+    - Typical runtimes: ~ 1ms, of which < 1ms in data generation
+    - 1 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because nothing left to do
+
+
+tests/test_property_based.py::test_transfer_to_self_leaves_balance_unchanged:
+
+  - during generate phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 2 passing, 8 failing, and 0 invalid test cases
+    - Found 1 distinct error in this phase
+
+  - during shrink phase (0.01 seconds):
+    - Typical runtimes: ~ 0-1 ms, of which < 1ms in data generation
+    - 2 passing, 3 failing, and 1 invalid test cases
+    - Tried 6 shrinks of which 3 were successful
+
+  - Stopped because nothing left to do
+
+
+=========================== short test summary info ===========================
+FAILED tests/test_property_based.py::test_deposit_then_withdraw_is_round_trip
+FAILED tests/test_property_based.py::test_balance_always_has_at_most_two_decimal_places
+FAILED tests/test_property_based.py::test_deposit_of_zero_or_negative_is_rejected
+FAILED tests/test_property_based.py::test_withdraw_of_negative_amount_is_rejected
+FAILED tests/test_property_based.py::test_balance_never_negative_after_withdraw
+FAILED tests/test_property_based.py::test_interest_never_decreases_balance - ...
+FAILED tests/test_property_based.py::test_interest_is_rounded_to_nearest_paisa
+FAILED tests/test_property_based.py::test_transfer_conserves_total_money - As...
+FAILED tests/test_property_based.py::test_transfer_to_self_leaves_balance_unchanged
+========================= 9 failed, 1 passed in 1.67s =========================

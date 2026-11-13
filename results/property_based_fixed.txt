@@ -1,0 +1,114 @@
+$ BANK_VERSION=fixed pytest tests/test_property_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\Users\rishi\property-based-testing-project\results\property_based_fixed.xml
+
+============================= test session starts =============================
+platform win32 -- Python 3.14.6, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\rishi\property-based-testing-project\.venv\Scripts\python.exe
+hypothesis profile 'project' -> database=None, deadline=None
+rootdir: C:\Users\rishi\property-based-testing-project
+configfile: pytest.ini
+plugins: hypothesis-6.170.15
+collecting ... collected 10 items
+
+tests/test_property_based.py::test_deposit_then_withdraw_is_round_trip PASSED [ 10%]
+tests/test_property_based.py::test_balance_always_has_at_most_two_decimal_places PASSED [ 20%]
+tests/test_property_based.py::test_deposit_of_zero_or_negative_is_rejected PASSED [ 30%]
+tests/test_property_based.py::test_withdraw_of_negative_amount_is_rejected PASSED [ 40%]
+tests/test_property_based.py::test_balance_never_negative_after_withdraw PASSED [ 50%]
+tests/test_property_based.py::test_overdraft_of_one_rupee_or_more_is_rejected PASSED [ 60%]
+tests/test_property_based.py::test_interest_never_decreases_balance PASSED [ 70%]
+tests/test_property_based.py::test_interest_is_rounded_to_nearest_paisa PASSED [ 80%]
+tests/test_property_based.py::test_transfer_conserves_total_money PASSED [ 90%]
+tests/test_property_based.py::test_transfer_to_self_leaves_balance_unchanged PASSED [100%]
+
+- generated xml file: C:\Users\rishi\property-based-testing-project\results\property_based_fixed.xml -
+============================ Hypothesis Statistics ============================
+tests/test_property_based.py::test_deposit_then_withdraw_is_round_trip:
+
+  - during generate phase (0.07 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_balance_always_has_at_most_two_decimal_places:
+
+  - during generate phase (0.13 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 27 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_deposit_of_zero_or_negative_is_rejected:
+
+  - during generate phase (0.08 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_withdraw_of_negative_amount_is_rejected:
+
+  - during generate phase (0.12 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_balance_never_negative_after_withdraw:
+
+  - during generate phase (0.14 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 300 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=300
+
+
+tests/test_property_based.py::test_overdraft_of_one_rupee_or_more_is_rejected:
+
+  - during generate phase (0.09 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_interest_never_decreases_balance:
+
+  - during generate phase (0.08 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_interest_is_rounded_to_nearest_paisa:
+
+  - during generate phase (0.08 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_transfer_conserves_total_money:
+
+  - during generate phase (0.12 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 7 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+tests/test_property_based.py::test_transfer_to_self_leaves_balance_unchanged:
+
+  - during generate phase (0.07 seconds):
+    - Typical runtimes: < 1ms, of which < 1ms in data generation
+    - 200 passing, 0 failing, and 0 invalid test cases
+
+  - Stopped because settings.max_examples=200
+
+
+============================= 10 passed in 1.07s ==============================

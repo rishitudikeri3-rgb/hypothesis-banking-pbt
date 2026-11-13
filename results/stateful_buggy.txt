@@ -1,0 +1,102 @@
+$ BANK_VERSION=buggy pytest tests/test_stateful.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\Users\rishi\property-based-testing-project\results\stateful_buggy.xml
+
+============================= test session starts =============================
+platform win32 -- Python 3.14.6, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\rishi\property-based-testing-project\.venv\Scripts\python.exe
+hypothesis profile 'project' -> database=None, deadline=None
+rootdir: C:\Users\rishi\property-based-testing-project
+configfile: pytest.ini
+plugins: hypothesis-6.170.15
+collecting ... collected 1 item
+
+tests/test_stateful.py::TestBankStateMachine::runTest FAILED             [100%]
+
+================================== FAILURES ===================================
+________________________ TestBankStateMachine.runTest _________________________
+  + Exception Group Traceback (most recent call last):
+  |   File "C:\Users\rishi\property-based-testing-project\.venv\Lib\site-packages\hypothesis\stateful.py", line 558, in runTest
+  |     run_state_machine_as_test(cls, settings=self.settings)
+  |     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "C:\Users\rishi\property-based-testing-project\.venv\Lib\site-packages\hypothesis\stateful.py", line 308, in run_state_machine_as_test
+  |     state_machine_test()
+  |     ~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\rishi\property-based-testing-project\.venv\Lib\site-packages\hypothesis\stateful.py", line 154, in run_state_machine
+  |     @given(st.data())
+  |                ^^^
+  | ExceptionGroup: Hypothesis found 3 distinct failures. (3 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\rishi\property-based-testing-project\tests\test_stateful.py", line 89, in total_money_is_conserved
+    |     assert actual == expected, f"INVARIANT total-money-conserved violated: bank has {actual}, expected {expected}"
+    | AssertionError: INVARIANT total-money-conserved violated: bank has 3.0199999999999996, expected 3.02
+    | assert Decimal('3.0199999999999996') == Decimal('3.02')
+    | Failing test case: <state machine>
+    | state = BankMachine()
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC1', amount=Decimal('0.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC0', amount=Decimal('3.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.teardown()
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\rishi\property-based-testing-project\tests\test_stateful.py", line 95, in balances_match_model
+    |     assert actual == self.model[acc_id], (
+    |         f"INVARIANT balance-matches-model violated: {acc_id} has {actual}, expected {self.model[acc_id]}"
+    |     )
+    | AssertionError: INVARIANT balance-matches-model violated: ACC0 has 3.0199999999999996, expected 3.02
+    | assert Decimal('3.0199999999999996') == Decimal('3.02')
+    | Failing test case: <state machine>
+    | state = BankMachine()
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC0', amount=Decimal('0.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC0', amount=Decimal('3.01'))
+    | state.balances_match_model()
+    | state.teardown()
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\rishi\property-based-testing-project\tests\test_stateful.py", line 81, in no_negative_balances
+    |     assert balance >= 0, f"INVARIANT no-negative-balance violated: {acc_id} = {balance}"
+    | AssertionError: INVARIANT no-negative-balance violated: ACC0 = -0.01
+    | assert Decimal('-0.01') >= 0
+    | Failing test case: <state machine>
+    | state = BankMachine()
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.withdraw(acc_id='ACC0', amount=Decimal('0.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.teardown()
+    +------------------------------------
+- generated xml file: C:\Users\rishi\property-based-testing-project\results\stateful_buggy.xml -
+============================ Hypothesis Statistics ============================
+tests/test_stateful.py::TestBankStateMachine::runTest:
+
+  - during generate phase (0.04 seconds):
+    - Typical runtimes: ~ 1-10 ms, of which ~ 0-4 ms in data generation
+    - 0 passing, 9 failing, and 1 invalid test cases
+    - Found 2 distinct errors in this phase
+
+  - during shrink phase (0.24 seconds):
+    - Typical runtimes: ~ 0-2 ms, of which ~ 0-1 ms in data generation
+    - 0 passing, 45 failing, and 57 invalid test cases
+    - Found 1 more distinct error in this phase
+    - Tried 102 shrinks of which 12 were successful
+
+  - Stopped because nothing left to do
+
+
+=========================== short test summary info ===========================
+FAILED tests/test_stateful.py::TestBankStateMachine::runTest - ExceptionGroup...
+============================== 1 failed in 0.40s ==============================

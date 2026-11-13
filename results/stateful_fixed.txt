@@ -1,0 +1,26 @@
+$ BANK_VERSION=fixed pytest tests/test_stateful.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\Users\rishi\property-based-testing-project\results\stateful_fixed.xml
+
+============================= test session starts =============================
+platform win32 -- Python 3.14.6, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\rishi\property-based-testing-project\.venv\Scripts\python.exe
+hypothesis profile 'project' -> database=None, deadline=None
+rootdir: C:\Users\rishi\property-based-testing-project
+configfile: pytest.ini
+plugins: hypothesis-6.170.15
+collecting ... collected 1 item
+
+tests/test_stateful.py::TestBankStateMachine::runTest PASSED             [100%]
+
+- generated xml file: C:\Users\rishi\property-based-testing-project\results\stateful_fixed.xml -
+============================ Hypothesis Statistics ============================
+tests/test_stateful.py::TestBankStateMachine::runTest:
+
+  - during generate phase (0.62 seconds):
+    - Typical runtimes: ~ 1-2 ms, of which ~ 1-2 ms in data generation
+    - 200 passing, 0 failing, and 2 invalid test cases
+    - Events:
+      * 63.86%, Retried draw from sampled_from([Rule(function=deposit, arguments={'acc_id': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'amount': decimals(min_value=Decimal('0.01'), max_value=Decimal('1000.00'), places=2)}, _cached_hash=-948418481090090487, arguments_strategies={'acc_id': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'amount': decimals(min_value=Decimal('0.01'), max_value=Decimal('1000.00'), places=2)}), Rule(function=withdraw, arguments={'acc_id': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'amount': decimals(min_value=Decimal('0.01'), max_value=Decimal('1000.00'), places=2)}, _cached_hash=8535051120977303753, arguments_strategies={'acc_id': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'amount': decimals(min_value=Decimal('0.01'), max_value=Decimal('1000.00'), places=2)}), Rule(function=transfer, arguments={'sender': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'receiver': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'amount': decimals(min_value=Decimal('0.01'), max_value=Decimal('1000.00'), places=2)}, _cached_hash=-6739812970395263934, arguments_strategies={'amount': decimals(min_value=Decimal('0.01'), max_value=Decimal('1000.00'), places=2), 'receiver': sampled_from(['ACC0', 'ACC1', 'ACC2']), 'sender': sampled_from(['ACC0', 'ACC1', 'ACC2'])})]).filter(RuleStrategy(machine=BankMachine({...}))._rule_is_enabled) to satisfy filter
+
+  - Stopped because settings.max_examples=200
+
+
+============================== 1 passed in 0.69s ==============================

@@ -1,0 +1,29 @@
+$ BANK_VERSION=fixed pytest tests/test_example_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\Users\rishi\property-based-testing-project\results\example_based_fixed.xml
+
+============================= test session starts =============================
+platform win32 -- Python 3.14.6, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\rishi\property-based-testing-project\.venv\Scripts\python.exe
+hypothesis profile 'project' -> database=None, deadline=None
+rootdir: C:\Users\rishi\property-based-testing-project
+configfile: pytest.ini
+plugins: hypothesis-6.170.15
+collecting ... collected 15 items
+
+tests/test_example_based.py::test_new_account_has_opening_balance PASSED [  6%]
+tests/test_example_based.py::test_new_account_default_balance_is_zero PASSED [ 13%]
+tests/test_example_based.py::test_deposit_increases_balance PASSED       [ 20%]
+tests/test_example_based.py::test_multiple_deposits_add_up PASSED        [ 26%]
+tests/test_example_based.py::test_deposit_with_paise PASSED              [ 33%]
+tests/test_example_based.py::test_withdraw_decreases_balance PASSED      [ 40%]
+tests/test_example_based.py::test_withdraw_entire_balance PASSED         [ 46%]
+tests/test_example_based.py::test_withdraw_more_than_balance_raises PASSED [ 53%]
+tests/test_example_based.py::test_transfer_moves_money PASSED            [ 60%]
+tests/test_example_based.py::test_transfer_more_than_balance_raises PASSED [ 66%]
+tests/test_example_based.py::test_apply_interest PASSED                  [ 73%]
+tests/test_example_based.py::test_zero_interest_leaves_balance_unchanged PASSED [ 80%]
+tests/test_example_based.py::test_bank_total_money PASSED                [ 86%]
+tests/test_example_based.py::test_bank_total_unchanged_after_transfer PASSED [ 93%]
+tests/test_example_based.py::test_duplicate_account_id_raises PASSED     [100%]
+
+- generated xml file: C:\Users\rishi\property-based-testing-project\results\example_based_fixed.xml -
+============================ Hypothesis Statistics ============================
+============================= 15 passed in 0.03s ==============================

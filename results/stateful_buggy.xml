@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.401" timestamp="2026-11-13T07:08:47.942118+05:30" hostname="DESKTOP-7FSQ4IL"><properties><property name="hypothesis-statistics-tests/test_stateful.py::TestBankStateMachine::runTest" value="dGVzdHMvdGVzdF9zdGF0ZWZ1bC5weTo6VGVzdEJhbmtTdGF0ZU1hY2hpbmU6OnJ1blRlc3Q6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjA0IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDEtMTAgbXMsIG9mIHdoaWNoIH4gMC00IG1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDkgZmFpbGluZywgYW5kIDEgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDIgZGlzdGluY3QgZXJyb3JzIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjI0IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMiBtcywgb2Ygd2hpY2ggfiAwLTEgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgNDUgZmFpbGluZywgYW5kIDU3IGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIG1vcmUgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQogICAgLSBUcmllZCAxMDIgc2hyaW5rcyBvZiB3aGljaCAxMiB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /></properties><testcase classname="tests.test_stateful.TestBankStateMachine" name="runTest" time="0.327"><failure message="ExceptionGroup: Hypothesis found 3 distinct failures. (3 sub-exceptions)">+ Exception Group Traceback (most recent call last):
+  |   File "C:\Users\rishi\property-based-testing-project\.venv\Lib\site-packages\hypothesis\stateful.py", line 558, in runTest
+  |     run_state_machine_as_test(cls, settings=self.settings)
+  |     ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |   File "C:\Users\rishi\property-based-testing-project\.venv\Lib\site-packages\hypothesis\stateful.py", line 308, in run_state_machine_as_test
+  |     state_machine_test()
+  |     ~~~~~~~~~~~~~~~~~~^^
+  |   File "C:\Users\rishi\property-based-testing-project\.venv\Lib\site-packages\hypothesis\stateful.py", line 154, in run_state_machine
+  |     @given(st.data())
+  |                ^^^
+  | ExceptionGroup: Hypothesis found 3 distinct failures. (3 sub-exceptions)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\rishi\property-based-testing-project\tests\test_stateful.py", line 89, in total_money_is_conserved
+    |     assert actual == expected, f"INVARIANT total-money-conserved violated: bank has {actual}, expected {expected}"
+    | AssertionError: INVARIANT total-money-conserved violated: bank has 3.0199999999999996, expected 3.02
+    | assert Decimal('3.0199999999999996') == Decimal('3.02')
+    | Failing test case: &lt;state machine&gt;
+    | state = BankMachine()
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC1', amount=Decimal('0.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC0', amount=Decimal('3.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.teardown()
+    +---------------- 2 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\rishi\property-based-testing-project\tests\test_stateful.py", line 95, in balances_match_model
+    |     assert actual == self.model[acc_id], (
+    |         f"INVARIANT balance-matches-model violated: {acc_id} has {actual}, expected {self.model[acc_id]}"
+    |     )
+    | AssertionError: INVARIANT balance-matches-model violated: ACC0 has 3.0199999999999996, expected 3.02
+    | assert Decimal('3.0199999999999996') == Decimal('3.02')
+    | Failing test case: &lt;state machine&gt;
+    | state = BankMachine()
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC0', amount=Decimal('0.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.deposit(acc_id='ACC0', amount=Decimal('3.01'))
+    | state.balances_match_model()
+    | state.teardown()
+    +---------------- 3 ----------------
+    | Traceback (most recent call last):
+    |   File "C:\Users\rishi\property-based-testing-project\tests\test_stateful.py", line 81, in no_negative_balances
+    |     assert balance &gt;= 0, f"INVARIANT no-negative-balance violated: {acc_id} = {balance}"
+    | AssertionError: INVARIANT no-negative-balance violated: ACC0 = -0.01
+    | assert Decimal('-0.01') &gt;= 0
+    | Failing test case: &lt;state machine&gt;
+    | state = BankMachine()
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.total_money_is_conserved()
+    | state.withdraw(acc_id='ACC0', amount=Decimal('0.01'))
+    | state.balances_match_model()
+    | state.no_negative_balances()
+    | state.teardown()
+    +------------------------------------</failure></testcase></testsuite></testsuites>

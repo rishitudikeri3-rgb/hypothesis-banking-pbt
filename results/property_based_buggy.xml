@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="10" time="1.677" timestamp="2026-11-13T07:08:45.568957+05:30" hostname="DESKTOP-7FSQ4IL"><properties><property name="hypothesis-statistics-tests/test_property_based.py::test_deposit_then_withdraw_is_round_trip" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9kZXBvc2l0X3RoZW5fd2l0aGRyYXdfaXNfcm91bmRfdHJpcDoKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDIgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC04IG1zLCBvZiB3aGljaCB+IDAtMSBtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gOCBwYXNzaW5nLCAyIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjAzIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDExIHBhc3NpbmcsIDggZmFpbGluZywgYW5kIDEgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDIwIHNocmlua3Mgb2Ygd2hpY2ggOCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-tests/test_property_based.py::test_balance_always_has_at_most_two_decimal_places" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9iYWxhbmNlX2Fsd2F5c19oYXNfYXRfbW9zdF90d29fZGVjaW1hbF9wbGFjZXM6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggfiAwLTEgbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDExIHBhc3NpbmcsIDEgZmFpbGluZywgYW5kIDIgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDkgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0xIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gNDAgcGFzc2luZywgMjIgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIFRyaWVkIDYyIHNocmlua3Mgb2Ygd2hpY2ggMjEgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-tests/test_property_based.py::test_deposit_of_zero_or_negative_is_rejected" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9kZXBvc2l0X29mX3plcm9fb3JfbmVnYXRpdmVfaXNfcmVqZWN0ZWQ6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMTAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDAgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IDwgMW1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMC4zOCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAxbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDI4NyBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-tests/test_property_based.py::test_withdraw_of_negative_amount_is_rejected" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF93aXRoZHJhd19vZl9uZWdhdGl2ZV9hbW91bnRfaXNfcmVqZWN0ZWQ6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjAyIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDAgcGFzc2luZywgMTAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDAgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMW1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMC4zOSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTEgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAwIHBhc3NpbmcsIDI3OCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-tests/test_property_based.py::test_balance_never_negative_after_withdraw" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9iYWxhbmNlX25ldmVyX25lZ2F0aXZlX2FmdGVyX3dpdGhkcmF3OgoKICAtIGR1cmluZyBnZW5lcmF0ZSBwaGFzZSAoMC4wMSBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTEgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA4IHBhc3NpbmcsIDIgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCiAgICAtIEZvdW5kIDEgZGlzdGluY3QgZXJyb3IgaW4gdGhpcyBwaGFzZQoKICAtIGR1cmluZyBzaHJpbmsgcGhhc2UgKDAuMDAgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0xIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMCBwYXNzaW5nLCAxIGZhaWxpbmcsIGFuZCAxIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAyIHNocmlua3Mgb2Ygd2hpY2ggMCB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBkdXJpbmcgZXhwbGFpbiBwaGFzZSAoMC4wMCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogPCAxbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAyIHBhc3NpbmcsIDAgZmFpbGluZywgYW5kIDAgaW52YWxpZCB0ZXN0IGNhc2VzCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-tests/test_property_based.py::test_overdraft_of_one_rupee_or_more_is_rejected" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9vdmVyZHJhZnRfb2Zfb25lX3J1cGVlX29yX21vcmVfaXNfcmVqZWN0ZWQ6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjA3IHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiA8IDFtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIwMCBwYXNzaW5nLCAwIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwoKICAtIFN0b3BwZWQgYmVjYXVzZSBzZXR0aW5ncy5tYXhfZXhhbXBsZXM9MjAw" /><property name="hypothesis-statistics-tests/test_property_based.py::test_interest_never_decreases_balance" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9pbnRlcmVzdF9uZXZlcl9kZWNyZWFzZXNfYmFsYW5jZToKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0xIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gOCBwYXNzaW5nLCAyIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjEzIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDcwIHBhc3NpbmcsIDMxIGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBUcmllZCAxMDEgc2hyaW5rcyBvZiB3aGljaCAzMSB3ZXJlIHN1Y2Nlc3NmdWwKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-tests/test_property_based.py::test_interest_is_rounded_to_nearest_paisa" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF9pbnRlcmVzdF9pc19yb3VuZGVkX3RvX25lYXJlc3RfcGFpc2E6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDcgcGFzc2luZywgMyBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4yMCBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTEgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSA4NyBwYXNzaW5nLCA1NiBmYWlsaW5nLCBhbmQgMiBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgMTQ1IHNocmlua3Mgb2Ygd2hpY2ggNTcgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /><property name="hypothesis-statistics-tests/test_property_based.py::test_transfer_conserves_total_money" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF90cmFuc2Zlcl9jb25zZXJ2ZXNfdG90YWxfbW9uZXk6CgogIC0gZHVyaW5nIGdlbmVyYXRlIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDYgcGFzc2luZywgNCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gRm91bmQgMSBkaXN0aW5jdCBlcnJvciBpbiB0aGlzIHBoYXNlCgogIC0gZHVyaW5nIHNocmluayBwaGFzZSAoMC4wNiBzZWNvbmRzKToKICAgIC0gVHlwaWNhbCBydW50aW1lczogfiAwLTEgbXMsIG9mIHdoaWNoIDwgMW1zIGluIGRhdGEgZ2VuZXJhdGlvbgogICAgLSAyMyBwYXNzaW5nLCA1IGZhaWxpbmcsIGFuZCAxNSBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgNDMgc2hyaW5rcyBvZiB3aGljaCA1IHdlcmUgc3VjY2Vzc2Z1bAoKICAtIGR1cmluZyBleHBsYWluIHBoYXNlICgwLjAwIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDFtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDEgcGFzc2luZywgMCBmYWlsaW5nLCBhbmQgMCBpbnZhbGlkIHRlc3QgY2FzZXMKCiAgLSBTdG9wcGVkIGJlY2F1c2Ugbm90aGluZyBsZWZ0IHRvIGRv" /><property name="hypothesis-statistics-tests/test_property_based.py::test_transfer_to_self_leaves_balance_unchanged" value="dGVzdHMvdGVzdF9wcm9wZXJ0eV9iYXNlZC5weTo6dGVzdF90cmFuc2Zlcl90b19zZWxmX2xlYXZlc19iYWxhbmNlX3VuY2hhbmdlZDoKCiAgLSBkdXJpbmcgZ2VuZXJhdGUgcGhhc2UgKDAuMDEgc2Vjb25kcyk6CiAgICAtIFR5cGljYWwgcnVudGltZXM6IH4gMC0xIG1zLCBvZiB3aGljaCA8IDFtcyBpbiBkYXRhIGdlbmVyYXRpb24KICAgIC0gMiBwYXNzaW5nLCA4IGZhaWxpbmcsIGFuZCAwIGludmFsaWQgdGVzdCBjYXNlcwogICAgLSBGb3VuZCAxIGRpc3RpbmN0IGVycm9yIGluIHRoaXMgcGhhc2UKCiAgLSBkdXJpbmcgc2hyaW5rIHBoYXNlICgwLjAxIHNlY29uZHMpOgogICAgLSBUeXBpY2FsIHJ1bnRpbWVzOiB+IDAtMSBtcywgb2Ygd2hpY2ggPCAxbXMgaW4gZGF0YSBnZW5lcmF0aW9uCiAgICAtIDIgcGFzc2luZywgMyBmYWlsaW5nLCBhbmQgMSBpbnZhbGlkIHRlc3QgY2FzZXMKICAgIC0gVHJpZWQgNiBzaHJpbmtzIG9mIHdoaWNoIDMgd2VyZSBzdWNjZXNzZnVsCgogIC0gU3RvcHBlZCBiZWNhdXNlIG5vdGhpbmcgbGVmdCB0byBkbw==" /></properties><testcase classname="tests.test_property_based" name="test_deposit_then_withdraw_is_round_trip" time="0.089"><failure message="AssertionError: assert Decimal('0.009999999999999998') == Decimal('0.01')&#10; +  where Decimal('0.009999999999999998') = as_decimal(0.009999999999999998)&#10; +    where 0.009999999999999998 = get_balance()&#10; +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E227EF1D0&gt;.get_balance&#10;Failing test case: test_deposit_then_withdraw_is_round_trip(&#10;    start=Decimal('0.01'),&#10;    amount=Decimal('0.02'),&#10;)">@settings(max_examples=200)
+&gt;   @given(start=money, amount=positive_money)
+                   ^^^
+
+tests\test_property_based.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.01'), amount = Decimal('0.02')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=positive_money)
+    def test_deposit_then_withdraw_is_round_trip(start, amount):
+        """Depositing an amount and then withdrawing the same amount leaves the balance exactly where it started.
+        Strategy: start = decimals 0.00..10000.00 (2 dp); amount = decimals 0.01..10000.00 (2 dp)
+        Targets: BUG-1
+        """
+        acc = Account("A1", "Test", start)
+        acc.deposit(amount)
+        acc.withdraw(amount)
+&gt;       assert as_decimal(acc.get_balance()) == start
+E       AssertionError: assert Decimal('0.009999999999999998') == Decimal('0.01')
+E        +  where Decimal('0.009999999999999998') = as_decimal(0.009999999999999998)
+E        +    where 0.009999999999999998 = get_balance()
+E        +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E227EF1D0&gt;.get_balance
+E       Failing test case: test_deposit_then_withdraw_is_round_trip(
+E           start=Decimal('0.01'),
+E           amount=Decimal('0.02'),
+E       )
+
+tests\test_property_based.py:61: AssertionError</failure></testcase><testcase classname="tests.test_property_based" name="test_balance_always_has_at_most_two_decimal_places" time="0.110"><failure message="AssertionError: assert Decimal('2.0199999999999996') == Decimal('2.02')&#10; +  where Decimal('2.02') = &lt;built-in method quantize of decimal.Decimal object at 0x0000020E22A13440&gt;(Decimal('0.01'))&#10; +    where &lt;built-in method quantize of decimal.Decimal object at 0x0000020E22A13440&gt; = Decimal('2.0199999999999996').quantize&#10;Failing test case: test_balance_always_has_at_most_two_decimal_places(&#10;    deposits=[Decimal('0.01'), Decimal('2.01')],&#10;)">@settings(max_examples=200)
+&gt;   @given(deposits=st.lists(positive_money, min_size=1, max_size=20))
+                   ^^^
+
+tests\test_property_based.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+deposits = [Decimal('0.01'), Decimal('2.01')]
+
+    @settings(max_examples=200)
+    @given(deposits=st.lists(positive_money, min_size=1, max_size=20))
+    def test_balance_always_has_at_most_two_decimal_places(deposits):
+        """After any sequence of deposits the balance has at most 2 decimal places (whole paise).
+        Strategy: list of 1-20 deposits, each decimals 0.01..10000.00 (2 dp)
+        Targets: BUG-1
+        """
+        acc = Account("A1", "Test", 0)
+        for amount in deposits:
+            acc.deposit(amount)
+        balance = as_decimal(acc.get_balance())
+&gt;       assert balance == balance.quantize(CENT)
+E       AssertionError: assert Decimal('2.0199999999999996') == Decimal('2.02')
+E        +  where Decimal('2.02') = &lt;built-in method quantize of decimal.Decimal object at 0x0000020E22A13440&gt;(Decimal('0.01'))
+E        +    where &lt;built-in method quantize of decimal.Decimal object at 0x0000020E22A13440&gt; = Decimal('2.0199999999999996').quantize
+E       Failing test case: test_balance_always_has_at_most_two_decimal_places(
+E           deposits=[Decimal('0.01'), Decimal('2.01')],
+E       )
+
+tests\test_property_based.py:75: AssertionError</failure></testcase><testcase classname="tests.test_property_based" name="test_deposit_of_zero_or_negative_is_rejected" time="0.402"><failure message="Failed: DID NOT RAISE ValueError&#10;Failing test case: test_deposit_of_zero_or_negative_is_rejected(&#10;    # The test always failed when commented parts were varied together.&#10;    start=Decimal('0.00'),  # or any other generated value&#10;    amount=Decimal('0.00'),  # or any other generated value&#10;)">@settings(max_examples=200)
+&gt;   @given(start=money, amount=non_positive_money)
+                   ^^^
+
+tests\test_property_based.py:79: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.00'), amount = Decimal('0.00')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=non_positive_money)
+    def test_deposit_of_zero_or_negative_is_rejected(start, amount):
+        """Depositing zero or a negative amount always raises ValueError and leaves the balance unchanged.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals -10000.00..0.00 (2 dp)
+        Targets: BUG-6
+        """
+        acc = Account("A1", "Test", start)
+&gt;       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+E       Failing test case: test_deposit_of_zero_or_negative_is_rejected(
+E           # The test always failed when commented parts were varied together.
+E           start=Decimal('0.00'),  # or any other generated value
+E           amount=Decimal('0.00'),  # or any other generated value
+E       )
+
+tests\test_property_based.py:86: Failed</failure></testcase><testcase classname="tests.test_property_based" name="test_withdraw_of_negative_amount_is_rejected" time="0.410"><failure message="Failed: DID NOT RAISE ValueError&#10;Failing test case: test_withdraw_of_negative_amount_is_rejected(&#10;    # The test always failed when commented parts were varied together.&#10;    start=Decimal('0.00'),  # or any other generated value&#10;    amount=Decimal('-0.01'),  # or any other generated value&#10;)">@settings(max_examples=200)
+&gt;   @given(start=money, amount=negative_money)
+                   ^^^
+
+tests\test_property_based.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.00'), amount = Decimal('-0.01')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=negative_money)
+    def test_withdraw_of_negative_amount_is_rejected(start, amount):
+        """Withdrawing a negative amount always raises ValueError and leaves the balance unchanged.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals -10000.00..-0.01 (2 dp)
+        Targets: BUG-2
+        """
+        acc = Account("A1", "Test", start)
+&gt;       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+E       Failing test case: test_withdraw_of_negative_amount_is_rejected(
+E           # The test always failed when commented parts were varied together.
+E           start=Decimal('0.00'),  # or any other generated value
+E           amount=Decimal('-0.01'),  # or any other generated value
+E       )
+
+tests\test_property_based.py:99: Failed</failure></testcase><testcase classname="tests.test_property_based" name="test_balance_never_negative_after_withdraw" time="0.022"><failure message="AssertionError: assert Decimal('-0.01') &gt;= 0&#10; +  where Decimal('-0.01') = as_decimal(-0.01)&#10; +    where -0.01 = get_balance()&#10; +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E2363B3B0&gt;.get_balance&#10;Failing test case: test_balance_never_negative_after_withdraw(&#10;    start=Decimal('0.00'),&#10;    amount=Decimal('0.01'),&#10;)">@settings(max_examples=300)
+&gt;   @example(start=Decimal("100.00"), amount=Decimal("100.00"))
+                   ^^^
+
+tests\test_property_based.py:108: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.00'), amount = Decimal('0.01')
+
+    @settings(max_examples=300)
+    @example(start=Decimal("100.00"), amount=Decimal("100.00"))
+    @given(start=money, amount=positive_money)
+    def test_balance_never_negative_after_withdraw(start, amount):
+        """After any withdrawal attempt (accepted or rejected) the balance is never negative.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00; @example(100, 100)
+        Targets: BUG-3
+        """
+        acc = Account("A1", "Test", start)
+        try:
+            acc.withdraw(amount)
+        except ValueError:
+            pass  # a rejected withdrawal is fine
+&gt;       assert as_decimal(acc.get_balance()) &gt;= 0
+E       AssertionError: assert Decimal('-0.01') &gt;= 0
+E        +  where Decimal('-0.01') = as_decimal(-0.01)
+E        +    where -0.01 = get_balance()
+E        +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E2363B3B0&gt;.get_balance
+E       Failing test case: test_balance_never_negative_after_withdraw(
+E           start=Decimal('0.00'),
+E           amount=Decimal('0.01'),
+E       )
+
+tests\test_property_based.py:120: AssertionError</failure></testcase><testcase classname="tests.test_property_based" name="test_overdraft_of_one_rupee_or_more_is_rejected" time="0.070" /><testcase classname="tests.test_property_based" name="test_interest_never_decreases_balance" time="0.147"><failure message="AssertionError: assert Decimal('0.36') &gt;= Decimal('0.37')&#10; +  where Decimal('0.36') = as_decimal(0.36)&#10; +    where 0.36 = get_balance()&#10; +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E234B3830&gt;.get_balance&#10;Failing test case: test_interest_never_decreases_balance(&#10;    start=Decimal('0.37'),&#10;    rate=Decimal('-2.71'),&#10;)">@settings(max_examples=200)
+&gt;   @given(start=money, rate=any_rate)
+                   ^^^
+
+tests\test_property_based.py:137: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.37'), rate = Decimal('-2.71')
+
+    @settings(max_examples=200)
+    @given(start=money, rate=any_rate)
+    def test_interest_never_decreases_balance(start, rate):
+        """Applying interest at any rate either raises ValueError or never decreases the balance.
+        Strategy: start = decimals 0.00..10000.00; rate = decimals -50.00..50.00 (2 dp)
+        Targets: BUG-5
+        """
+        acc = Account("A1", "Test", start)
+        try:
+            acc.apply_interest(rate)
+        except ValueError:
+            pass  # rejecting a negative rate is the correct behaviour
+&gt;       assert as_decimal(acc.get_balance()) &gt;= start
+E       AssertionError: assert Decimal('0.36') &gt;= Decimal('0.37')
+E        +  where Decimal('0.36') = as_decimal(0.36)
+E        +    where 0.36 = get_balance()
+E        +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E234B3830&gt;.get_balance
+E       Failing test case: test_interest_never_decreases_balance(
+E           start=Decimal('0.37'),
+E           rate=Decimal('-2.71'),
+E       )
+
+tests\test_property_based.py:148: AssertionError</failure></testcase><testcase classname="tests.test_property_based" name="test_interest_is_rounded_to_nearest_paisa" time="0.212"><failure message="AssertionError: assert Decimal('0.36') == Decimal('0.37')&#10; +  where Decimal('0.36') = as_decimal(0.36)&#10; +    where 0.36 = get_balance()&#10; +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E22EB73B0&gt;.get_balance&#10;Failing test case: test_interest_is_rounded_to_nearest_paisa(&#10;    start=Decimal('0.36'),&#10;    rate=Decimal('1.39'),&#10;)">@settings(max_examples=200)
+&gt;   @given(start=money, rate=non_negative_rate)
+                   ^^^
+
+tests\test_property_based.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.36'), rate = Decimal('1.39')
+
+    @settings(max_examples=200)
+    @given(start=money, rate=non_negative_rate)
+    def test_interest_is_rounded_to_nearest_paisa(start, rate):
+        """Interest added equals balance x rate / 100, rounded half-up to the nearest paisa.
+        Strategy: start = decimals 0.00..10000.00; rate = decimals 0.00..50.00 (2 dp)
+        Targets: BUG-5
+        """
+        # The expected answer is computed independently with exact Decimal maths.
+        expected = start + (start * rate / 100).quantize(CENT, rounding=ROUND_HALF_UP)
+        acc = Account("A1", "Test", start)
+        acc.apply_interest(rate)
+&gt;       assert as_decimal(acc.get_balance()) == expected
+E       AssertionError: assert Decimal('0.36') == Decimal('0.37')
+E        +  where Decimal('0.36') = as_decimal(0.36)
+E        +    where 0.36 = get_balance()
+E        +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E22EB73B0&gt;.get_balance
+E       Failing test case: test_interest_is_rounded_to_nearest_paisa(
+E           start=Decimal('0.36'),
+E           rate=Decimal('1.39'),
+E       )
+
+tests\test_property_based.py:162: AssertionError</failure></testcase><testcase classname="tests.test_property_based" name="test_transfer_conserves_total_money" time="0.085"><failure message="AssertionError: assert Decimal('0.02') == Decimal('0.01')&#10; +  where Decimal('0.02') = as_decimal(0.02)&#10; +    where 0.02 = total_money()&#10; +      where total_money = &lt;bank_buggy.Bank object at 0x0000020E22C27D40&gt;.total_money&#10;Failing test case: test_transfer_conserves_total_money(&#10;    balances=[Decimal('0.00'), Decimal('0.00'), Decimal('0.01')],&#10;    sender=2,&#10;    receiver=2,&#10;    amount=Decimal('0.01'),&#10;)">@settings(max_examples=200)
+&gt;   @given(
+            
+        balances=st.lists(money, min_size=3, max_size=3),
+        sender=st.integers(min_value=0, max_value=2),
+        receiver=st.integers(min_value=0, max_value=2),
+        amount=positive_money,
+    )
+
+tests\test_property_based.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+balances = [Decimal('0.00'), Decimal('0.00'), Decimal('0.01')], sender = 2
+receiver = 2, amount = Decimal('0.01')
+
+    @settings(max_examples=200)
+    @given(
+        balances=st.lists(money, min_size=3, max_size=3),
+        sender=st.integers(min_value=0, max_value=2),
+        receiver=st.integers(min_value=0, max_value=2),
+        amount=positive_money,
+    )
+    def test_transfer_conserves_total_money(balances, sender, receiver, amount):
+        """Any transfer between any two accounts in the bank never changes the bank's total money.
+        Strategy: 3 balances (decimals 0.00..10000.00); sender/receiver = integers 0..2 (may be equal); amount = decimals 0.01..10000.00
+        Targets: BUG-4
+        """
+        bank = Bank()
+        accounts = [bank.open_account(f"ACC{i}", f"Owner{i}", b) for i, b in enumerate(balances)]
+        total_before = as_decimal(bank.total_money())
+        try:
+            accounts[sender].transfer(accounts[receiver], amount)
+        except ValueError:
+            pass  # a rejected transfer must also leave the total unchanged
+&gt;       assert as_decimal(bank.total_money()) == total_before
+E       AssertionError: assert Decimal('0.02') == Decimal('0.01')
+E        +  where Decimal('0.02') = as_decimal(0.02)
+E        +    where 0.02 = total_money()
+E        +      where total_money = &lt;bank_buggy.Bank object at 0x0000020E22C27D40&gt;.total_money
+E       Failing test case: test_transfer_conserves_total_money(
+E           balances=[Decimal('0.00'), Decimal('0.00'), Decimal('0.01')],
+E           sender=2,
+E           receiver=2,
+E           amount=Decimal('0.01'),
+E       )
+
+tests\test_property_based.py:184: AssertionError</failure></testcase><testcase classname="tests.test_property_based" name="test_transfer_to_self_leaves_balance_unchanged" time="0.028"><failure message="AssertionError: assert Decimal('0.02') == Decimal('0.01')&#10; +  where Decimal('0.02') = as_decimal(0.02)&#10; +    where 0.02 = get_balance()&#10; +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E22DC5D90&gt;.get_balance&#10;Failing test case: test_transfer_to_self_leaves_balance_unchanged(&#10;    start=Decimal('0.01'),&#10;    amount=Decimal('0.01'),&#10;)&#10;Explanation:&#10;    These lines were always and only run by failing test cases:&#10;[+1 more line; full report in element text]">@settings(max_examples=200)
+&gt;   @given(start=money, amount=positive_money)
+                   ^^^
+
+tests\test_property_based.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+start = Decimal('0.01'), amount = Decimal('0.01')
+
+    @settings(max_examples=200)
+    @given(start=money, amount=positive_money)
+    def test_transfer_to_self_leaves_balance_unchanged(start, amount):
+        """Transferring money from an account to itself never changes its balance.
+        Strategy: start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00 (2 dp)
+        Targets: BUG-4
+        """
+        acc = Account("A1", "Test", start)
+        try:
+            acc.transfer(acc, amount)
+        except ValueError:
+            pass  # refusing a self-transfer is acceptable
+&gt;       assert as_decimal(acc.get_balance()) == start
+E       AssertionError: assert Decimal('0.02') == Decimal('0.01')
+E        +  where Decimal('0.02') = as_decimal(0.02)
+E        +    where 0.02 = get_balance()
+E        +      where get_balance = &lt;bank_buggy.Account object at 0x0000020E22DC5D90&gt;.get_balance
+E       Failing test case: test_transfer_to_self_leaves_balance_unchanged(
+E           start=Decimal('0.01'),
+E           amount=Decimal('0.01'),
+E       )
+E       Explanation:
+E           These lines were always and only run by failing test cases:
+E               C:\Users\rishi\property-based-testing-project\src\bank_buggy.py:96
+
+tests\test_property_based.py:199: AssertionError</failure></testcase></testsuite></testsuites>

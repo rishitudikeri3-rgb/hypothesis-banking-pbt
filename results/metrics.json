@@ -1,0 +1,1146 @@
+{
+  "generated_at": "2026-11-13T07:08:44",
+  "seed": 12345,
+  "environment": {
+    "python": "3.14.6",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "pytest": "9.2.0",
+    "hypothesis": "6.170.15"
+  },
+  "bugs": {
+    "BUG-1": "Money is stored as a binary float.",
+    "BUG-2": "withdraw() does not reject negative amounts.",
+    "BUG-3": "The overdraft check compares whole rupees only (int(...)).",
+    "BUG-4": "transfer() to the SAME account creates money.",
+    "BUG-5": "apply_interest() accepts negative rates AND truncates instead of rounding.",
+    "BUG-6": "deposit() accepts zero and negative amounts."
+  },
+  "runs": {
+    "buggy": {
+      "example_based": {
+        "test_file": "tests/test_example_based.py",
+        "command": "pytest tests/test_example_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\\Users\\rishi\\property-based-testing-project\\results\\example_based_buggy.xml",
+        "exit_code": 0,
+        "total": 15,
+        "passed": 15,
+        "failed": 0,
+        "pytest_time_s": 0.032,
+        "wall_time_s": 0.631,
+        "examples_executed": 15,
+        "bugs_detected": [],
+        "tests": [
+          {
+            "name": "test_new_account_has_opening_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A new account starts with the opening balance given.",
+            "input": "open account with balance 500",
+            "expected": "balance is 500",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_new_account_default_balance_is_zero",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A new account opened without a balance starts at zero.",
+            "input": "open account with no balance argument",
+            "expected": "balance is 0",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_deposit_increases_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Depositing money increases the balance by that amount.",
+            "input": "balance 0, deposit 100",
+            "expected": "balance is 100",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_multiple_deposits_add_up",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Several deposits add up correctly.",
+            "input": "balance 0, deposit 100, 250, 50",
+            "expected": "balance is 400",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_deposit_with_paise",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Deposits with paise (decimal amounts) are added correctly.",
+            "input": "balance 0, deposit 10.50 then 20.25",
+            "expected": "balance is 30.75",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_decreases_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Withdrawing money decreases the balance by that amount.",
+            "input": "balance 100, withdraw 50",
+            "expected": "balance is 50",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_entire_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Withdrawing exactly the whole balance leaves zero.",
+            "input": "balance 100, withdraw 100",
+            "expected": "balance is 0",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_more_than_balance_raises",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Withdrawing more than the balance is rejected.",
+            "input": "balance 100, withdraw 150",
+            "expected": "ValueError, balance stays 100",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_transfer_moves_money",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A transfer moves money from one account to another.",
+            "input": "A=100, B=50, transfer 30 from A to B",
+            "expected": "A is 70, B is 80",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_transfer_more_than_balance_raises",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A transfer larger than the sender's balance is rejected.",
+            "input": "A=100, B=0, transfer 500 from A to B",
+            "expected": "ValueError, A stays 100, B stays 0",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_apply_interest",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Interest is added at the given percentage.",
+            "input": "balance 1000, rate 5%",
+            "expected": "balance is 1050",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_zero_interest_leaves_balance_unchanged",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A 0% interest rate does not change the balance.",
+            "input": "balance 1000, rate 0%",
+            "expected": "balance is 1000",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_bank_total_money",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "The bank's total is the sum of all account balances.",
+            "input": "accounts with 100, 200, 300",
+            "expected": "total_money is 600",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_bank_total_unchanged_after_transfer",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A transfer between two accounts keeps the bank's total the same.",
+            "input": "A=100, B=200, transfer 40 from A to B",
+            "expected": "total_money stays 300",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_duplicate_account_id_raises",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Opening two accounts with the same id is rejected.",
+            "input": "open \"A1\" twice",
+            "expected": "ValueError on the second open",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          }
+        ]
+      },
+      "property_based": {
+        "test_file": "tests/test_property_based.py",
+        "command": "pytest tests/test_property_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\\Users\\rishi\\property-based-testing-project\\results\\property_based_buggy.xml",
+        "exit_code": 1,
+        "total": 10,
+        "passed": 1,
+        "failed": 9,
+        "pytest_time_s": 1.677,
+        "wall_time_s": 2.328,
+        "examples_executed": 1221,
+        "bugs_detected": [
+          "BUG-1",
+          "BUG-2",
+          "BUG-3",
+          "BUG-4",
+          "BUG-5",
+          "BUG-6"
+        ],
+        "tests": [
+          {
+            "name": "test_deposit_then_withdraw_is_round_trip",
+            "status": "failed",
+            "time_s": 0.089,
+            "description": "Depositing an amount and then withdrawing the same amount leaves the balance exactly where it started.",
+            "strategy": "start = decimals 0.00..10000.00 (2 dp); amount = decimals 0.01..10000.00 (2 dp)",
+            "targets": "BUG-1",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 8,
+                  "failing": 2,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 11,
+                  "failing": 8,
+                  "invalid": 1
+                }
+              },
+              "valid_examples": 29,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 20,
+              "shrinks_successful": 8,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 29,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('0.009999999999999998') == Decimal('0.01')",
+                "counterexample": "test_deposit_then_withdraw_is_round_trip(\n    start=Decimal('0.01'),\n    amount=Decimal('0.02'),\n)",
+                "bugs": [
+                  "BUG-1"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_balance_always_has_at_most_two_decimal_places",
+            "status": "failed",
+            "time_s": 0.11,
+            "description": "After any sequence of deposits the balance has at most 2 decimal places (whole paise).",
+            "strategy": "list of 1-20 deposits, each decimals 0.01..10000.00 (2 dp)",
+            "targets": "BUG-1",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 11,
+                  "failing": 1,
+                  "invalid": 2
+                },
+                "shrink": {
+                  "passing": 40,
+                  "failing": 22,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 74,
+              "generate_phase_examples": 12,
+              "shrinks_tried": 62,
+              "shrinks_successful": 21,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 74,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('2.0199999999999996') == Decimal('2.02')",
+                "counterexample": "test_balance_always_has_at_most_two_decimal_places(\n    deposits=[Decimal('0.01'), Decimal('2.01')],\n)",
+                "bugs": [
+                  "BUG-1"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_deposit_of_zero_or_negative_is_rejected",
+            "status": "failed",
+            "time_s": 0.402,
+            "description": "Depositing zero or a negative amount always raises ValueError and leaves the balance unchanged.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals -10000.00..0.00 (2 dp)",
+            "targets": "BUG-6",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 0,
+                  "failing": 10,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 0,
+                  "failing": 1,
+                  "invalid": 0
+                },
+                "explain": {
+                  "passing": 0,
+                  "failing": 287,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 298,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 1,
+              "shrinks_successful": 0,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 298,
+            "failures": [
+              {
+                "message": "Failed: DID NOT RAISE ValueError",
+                "counterexample": "test_deposit_of_zero_or_negative_is_rejected(\n    # The test always failed when commented parts were varied together.\n    start=Decimal('0.00'),  # or any other generated value\n    amount=Decimal('0.00'),  # or any other generated value\n)",
+                "bugs": [
+                  "BUG-6"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_withdraw_of_negative_amount_is_rejected",
+            "status": "failed",
+            "time_s": 0.41,
+            "description": "Withdrawing a negative amount always raises ValueError and leaves the balance unchanged.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals -10000.00..-0.01 (2 dp)",
+            "targets": "BUG-2",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 0,
+                  "failing": 10,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 0,
+                  "failing": 1,
+                  "invalid": 0
+                },
+                "explain": {
+                  "passing": 0,
+                  "failing": 278,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 289,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 1,
+              "shrinks_successful": 0,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 289,
+            "failures": [
+              {
+                "message": "Failed: DID NOT RAISE ValueError",
+                "counterexample": "test_withdraw_of_negative_amount_is_rejected(\n    # The test always failed when commented parts were varied together.\n    start=Decimal('0.00'),  # or any other generated value\n    amount=Decimal('-0.01'),  # or any other generated value\n)",
+                "bugs": [
+                  "BUG-2"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_balance_never_negative_after_withdraw",
+            "status": "failed",
+            "time_s": 0.022,
+            "description": "After any withdrawal attempt (accepted or rejected) the balance is never negative.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00; @example(100, 100)",
+            "targets": "BUG-3",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 8,
+                  "failing": 2,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 0,
+                  "failing": 1,
+                  "invalid": 1
+                },
+                "explain": {
+                  "passing": 2,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 13,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 2,
+              "shrinks_successful": 0,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 13,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('-0.01') >= 0",
+                "counterexample": "test_balance_never_negative_after_withdraw(\n    start=Decimal('0.00'),\n    amount=Decimal('0.01'),\n)",
+                "bugs": [
+                  "BUG-3"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_overdraft_of_one_rupee_or_more_is_rejected",
+            "status": "passed",
+            "time_s": 0.07,
+            "description": "Withdrawing at least one rupee more than the balance is always rejected (control property).",
+            "strategy": "start = decimals 0.00..10000.00; extra = decimals 1.00..1000.00; amount = start + extra",
+            "targets": "none (control property: expected to pass on both versions)",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_interest_never_decreases_balance",
+            "status": "failed",
+            "time_s": 0.147,
+            "description": "Applying interest at any rate either raises ValueError or never decreases the balance.",
+            "strategy": "start = decimals 0.00..10000.00; rate = decimals -50.00..50.00 (2 dp)",
+            "targets": "BUG-5",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 8,
+                  "failing": 2,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 70,
+                  "failing": 31,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 111,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 101,
+              "shrinks_successful": 31,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 111,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('0.36') >= Decimal('0.37')",
+                "counterexample": "test_interest_never_decreases_balance(\n    start=Decimal('0.37'),\n    rate=Decimal('-2.71'),\n)",
+                "bugs": [
+                  "BUG-5"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_interest_is_rounded_to_nearest_paisa",
+            "status": "failed",
+            "time_s": 0.212,
+            "description": "Interest added equals balance x rate / 100, rounded half-up to the nearest paisa.",
+            "strategy": "start = decimals 0.00..10000.00; rate = decimals 0.00..50.00 (2 dp)",
+            "targets": "BUG-5",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 7,
+                  "failing": 3,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 87,
+                  "failing": 56,
+                  "invalid": 2
+                }
+              },
+              "valid_examples": 153,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 145,
+              "shrinks_successful": 57,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 153,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('0.36') == Decimal('0.37')",
+                "counterexample": "test_interest_is_rounded_to_nearest_paisa(\n    start=Decimal('0.36'),\n    rate=Decimal('1.39'),\n)",
+                "bugs": [
+                  "BUG-5"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_transfer_conserves_total_money",
+            "status": "failed",
+            "time_s": 0.085,
+            "description": "Any transfer between any two accounts in the bank never changes the bank's total money.",
+            "strategy": "3 balances (decimals 0.00..10000.00); sender/receiver = integers 0..2 (may be equal); amount = decimals 0.01..10000.00",
+            "targets": "BUG-4",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 6,
+                  "failing": 4,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 23,
+                  "failing": 5,
+                  "invalid": 15
+                },
+                "explain": {
+                  "passing": 1,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 39,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 43,
+              "shrinks_successful": 5,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 39,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('0.02') == Decimal('0.01')",
+                "counterexample": "test_transfer_conserves_total_money(\n    balances=[Decimal('0.00'), Decimal('0.00'), Decimal('0.01')],\n    sender=2,\n    receiver=2,\n    amount=Decimal('0.01'),\n)",
+                "bugs": [
+                  "BUG-4"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "test_transfer_to_self_leaves_balance_unchanged",
+            "status": "failed",
+            "time_s": 0.028,
+            "description": "Transferring money from an account to itself never changes its balance.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00 (2 dp)",
+            "targets": "BUG-4",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 2,
+                  "failing": 8,
+                  "invalid": 0
+                },
+                "shrink": {
+                  "passing": 2,
+                  "failing": 3,
+                  "invalid": 1
+                }
+              },
+              "valid_examples": 15,
+              "generate_phase_examples": 10,
+              "shrinks_tried": 6,
+              "shrinks_successful": 3,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 15,
+            "failures": [
+              {
+                "message": "AssertionError: assert Decimal('0.02') == Decimal('0.01')",
+                "counterexample": "test_transfer_to_self_leaves_balance_unchanged(\n    start=Decimal('0.01'),\n    amount=Decimal('0.01'),\n)",
+                "bugs": [
+                  "BUG-4"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "stateful": {
+        "test_file": "tests/test_stateful.py",
+        "command": "pytest tests/test_stateful.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\\Users\\rishi\\property-based-testing-project\\results\\stateful_buggy.xml",
+        "exit_code": 1,
+        "total": 1,
+        "passed": 0,
+        "failed": 1,
+        "pytest_time_s": 0.401,
+        "wall_time_s": 1.041,
+        "examples_executed": 54,
+        "bugs_detected": [
+          "BUG-1",
+          "BUG-3"
+        ],
+        "tests": [
+          {
+            "name": "TestBankStateMachine::runTest",
+            "status": "failed",
+            "time_s": 0.327,
+            "description": "Random sequences of deposit / withdraw / transfer on 3 accounts; invariants: no negative balance, total money conserved, balances match model.",
+            "strategy": "rules over sampled_from(3 account ids) and decimals 0.01..1000.00 (2 dp); 200 programs x up to 20 steps",
+            "targets": "any",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 0,
+                  "failing": 9,
+                  "invalid": 1
+                },
+                "shrink": {
+                  "passing": 0,
+                  "failing": 45,
+                  "invalid": 57
+                }
+              },
+              "valid_examples": 54,
+              "generate_phase_examples": 9,
+              "shrinks_tried": 102,
+              "shrinks_successful": 12,
+              "stopped_because": "nothing left to do"
+            },
+            "examples_executed": 54,
+            "failures": [
+              {
+                "message": "AssertionError: INVARIANT total-money-conserved violated: bank has 3.0199999999999996, expected 3.02",
+                "counterexample": "<state machine>\nstate = BankMachine()\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.total_money_is_conserved()\nstate.deposit(acc_id='ACC1', amount=Decimal('0.01'))\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.total_money_is_conserved()\nstate.deposit(acc_id='ACC0', amount=Decimal('3.01'))\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.total_money_is_conserved()\nstate.teardown()",
+                "bugs": [
+                  "BUG-1"
+                ]
+              },
+              {
+                "message": "AssertionError: INVARIANT balance-matches-model violated: ACC0 has 3.0199999999999996, expected 3.02",
+                "counterexample": "<state machine>\nstate = BankMachine()\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.total_money_is_conserved()\nstate.deposit(acc_id='ACC0', amount=Decimal('0.01'))\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.total_money_is_conserved()\nstate.deposit(acc_id='ACC0', amount=Decimal('3.01'))\nstate.balances_match_model()\nstate.teardown()",
+                "bugs": [
+                  "BUG-1"
+                ]
+              },
+              {
+                "message": "AssertionError: INVARIANT no-negative-balance violated: ACC0 = -0.01",
+                "counterexample": "<state machine>\nstate = BankMachine()\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.total_money_is_conserved()\nstate.withdraw(acc_id='ACC0', amount=Decimal('0.01'))\nstate.balances_match_model()\nstate.no_negative_balances()\nstate.teardown()",
+                "bugs": [
+                  "BUG-3"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "fixed": {
+      "example_based": {
+        "test_file": "tests/test_example_based.py",
+        "command": "pytest tests/test_example_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\\Users\\rishi\\property-based-testing-project\\results\\example_based_fixed.xml",
+        "exit_code": 0,
+        "total": 15,
+        "passed": 15,
+        "failed": 0,
+        "pytest_time_s": 0.033,
+        "wall_time_s": 0.622,
+        "examples_executed": 15,
+        "bugs_detected": [],
+        "tests": [
+          {
+            "name": "test_new_account_has_opening_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A new account starts with the opening balance given.",
+            "input": "open account with balance 500",
+            "expected": "balance is 500",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_new_account_default_balance_is_zero",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A new account opened without a balance starts at zero.",
+            "input": "open account with no balance argument",
+            "expected": "balance is 0",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_deposit_increases_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Depositing money increases the balance by that amount.",
+            "input": "balance 0, deposit 100",
+            "expected": "balance is 100",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_multiple_deposits_add_up",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Several deposits add up correctly.",
+            "input": "balance 0, deposit 100, 250, 50",
+            "expected": "balance is 400",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_deposit_with_paise",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Deposits with paise (decimal amounts) are added correctly.",
+            "input": "balance 0, deposit 10.50 then 20.25",
+            "expected": "balance is 30.75",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_decreases_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Withdrawing money decreases the balance by that amount.",
+            "input": "balance 100, withdraw 50",
+            "expected": "balance is 50",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_entire_balance",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Withdrawing exactly the whole balance leaves zero.",
+            "input": "balance 100, withdraw 100",
+            "expected": "balance is 0",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_more_than_balance_raises",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Withdrawing more than the balance is rejected.",
+            "input": "balance 100, withdraw 150",
+            "expected": "ValueError, balance stays 100",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_transfer_moves_money",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A transfer moves money from one account to another.",
+            "input": "A=100, B=50, transfer 30 from A to B",
+            "expected": "A is 70, B is 80",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_transfer_more_than_balance_raises",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A transfer larger than the sender's balance is rejected.",
+            "input": "A=100, B=0, transfer 500 from A to B",
+            "expected": "ValueError, A stays 100, B stays 0",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_apply_interest",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Interest is added at the given percentage.",
+            "input": "balance 1000, rate 5%",
+            "expected": "balance is 1050",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_zero_interest_leaves_balance_unchanged",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A 0% interest rate does not change the balance.",
+            "input": "balance 1000, rate 0%",
+            "expected": "balance is 1000",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_bank_total_money",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "The bank's total is the sum of all account balances.",
+            "input": "accounts with 100, 200, 300",
+            "expected": "total_money is 600",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_bank_total_unchanged_after_transfer",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "A transfer between two accounts keeps the bank's total the same.",
+            "input": "A=100, B=200, transfer 40 from A to B",
+            "expected": "total_money stays 300",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          },
+          {
+            "name": "test_duplicate_account_id_raises",
+            "status": "passed",
+            "time_s": 0.0,
+            "description": "Opening two accounts with the same id is rejected.",
+            "input": "open \"A1\" twice",
+            "expected": "ValueError on the second open",
+            "hypothesis": null,
+            "examples_executed": 1,
+            "failures": []
+          }
+        ]
+      },
+      "property_based": {
+        "test_file": "tests/test_property_based.py",
+        "command": "pytest tests/test_property_based.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\\Users\\rishi\\property-based-testing-project\\results\\property_based_fixed.xml",
+        "exit_code": 0,
+        "total": 10,
+        "passed": 10,
+        "failed": 0,
+        "pytest_time_s": 1.073,
+        "wall_time_s": 1.732,
+        "examples_executed": 2100,
+        "bugs_detected": [],
+        "tests": [
+          {
+            "name": "test_deposit_then_withdraw_is_round_trip",
+            "status": "passed",
+            "time_s": 0.076,
+            "description": "Depositing an amount and then withdrawing the same amount leaves the balance exactly where it started.",
+            "strategy": "start = decimals 0.00..10000.00 (2 dp); amount = decimals 0.01..10000.00 (2 dp)",
+            "targets": "BUG-1",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_balance_always_has_at_most_two_decimal_places",
+            "status": "passed",
+            "time_s": 0.134,
+            "description": "After any sequence of deposits the balance has at most 2 decimal places (whole paise).",
+            "strategy": "list of 1-20 deposits, each decimals 0.01..10000.00 (2 dp)",
+            "targets": "BUG-1",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 27
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_deposit_of_zero_or_negative_is_rejected",
+            "status": "passed",
+            "time_s": 0.083,
+            "description": "Depositing zero or a negative amount always raises ValueError and leaves the balance unchanged.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals -10000.00..0.00 (2 dp)",
+            "targets": "BUG-6",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_withdraw_of_negative_amount_is_rejected",
+            "status": "passed",
+            "time_s": 0.119,
+            "description": "Withdrawing a negative amount always raises ValueError and leaves the balance unchanged.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals -10000.00..-0.01 (2 dp)",
+            "targets": "BUG-2",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_balance_never_negative_after_withdraw",
+            "status": "passed",
+            "time_s": 0.137,
+            "description": "After any withdrawal attempt (accepted or rejected) the balance is never negative.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00; @example(100, 100)",
+            "targets": "BUG-3",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 300,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 300,
+              "generate_phase_examples": 300,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=300"
+            },
+            "examples_executed": 300,
+            "failures": []
+          },
+          {
+            "name": "test_overdraft_of_one_rupee_or_more_is_rejected",
+            "status": "passed",
+            "time_s": 0.092,
+            "description": "Withdrawing at least one rupee more than the balance is always rejected (control property).",
+            "strategy": "start = decimals 0.00..10000.00; extra = decimals 1.00..1000.00; amount = start + extra",
+            "targets": "none (control property: expected to pass on both versions)",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_interest_never_decreases_balance",
+            "status": "passed",
+            "time_s": 0.084,
+            "description": "Applying interest at any rate either raises ValueError or never decreases the balance.",
+            "strategy": "start = decimals 0.00..10000.00; rate = decimals -50.00..50.00 (2 dp)",
+            "targets": "BUG-5",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_interest_is_rounded_to_nearest_paisa",
+            "status": "passed",
+            "time_s": 0.085,
+            "description": "Interest added equals balance x rate / 100, rounded half-up to the nearest paisa.",
+            "strategy": "start = decimals 0.00..10000.00; rate = decimals 0.00..50.00 (2 dp)",
+            "targets": "BUG-5",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_transfer_conserves_total_money",
+            "status": "passed",
+            "time_s": 0.122,
+            "description": "Any transfer between any two accounts in the bank never changes the bank's total money.",
+            "strategy": "3 balances (decimals 0.00..10000.00); sender/receiver = integers 0..2 (may be equal); amount = decimals 0.01..10000.00",
+            "targets": "BUG-4",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 7
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          },
+          {
+            "name": "test_transfer_to_self_leaves_balance_unchanged",
+            "status": "passed",
+            "time_s": 0.075,
+            "description": "Transferring money from an account to itself never changes its balance.",
+            "strategy": "start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00 (2 dp)",
+            "targets": "BUG-4",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 0
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          }
+        ]
+      },
+      "stateful": {
+        "test_file": "tests/test_stateful.py",
+        "command": "pytest tests/test_stateful.py -v -p no:cacheprovider --hypothesis-seed=12345 --hypothesis-show-statistics --junitxml=C:\\Users\\rishi\\property-based-testing-project\\results\\stateful_fixed.xml",
+        "exit_code": 0,
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "pytest_time_s": 0.694,
+        "wall_time_s": 1.406,
+        "examples_executed": 200,
+        "bugs_detected": [],
+        "tests": [
+          {
+            "name": "TestBankStateMachine::runTest",
+            "status": "passed",
+            "time_s": 0.622,
+            "description": "Random sequences of deposit / withdraw / transfer on 3 accounts; invariants: no negative balance, total money conserved, balances match model.",
+            "strategy": "rules over sampled_from(3 account ids) and decimals 0.01..1000.00 (2 dp); 200 programs x up to 20 steps",
+            "targets": "any",
+            "hypothesis": {
+              "phases": {
+                "generate": {
+                  "passing": 200,
+                  "failing": 0,
+                  "invalid": 2
+                }
+              },
+              "valid_examples": 200,
+              "generate_phase_examples": 200,
+              "shrinks_tried": 0,
+              "shrinks_successful": 0,
+              "stopped_because": "settings.max_examples=200"
+            },
+            "examples_executed": 200,
+            "failures": []
+          }
+        ]
+      }
+    }
+  },
+  "verification": {
+    "example_tests_all_pass_on_buggy": true,
+    "every_seeded_bug_caught_by_pbt": true,
+    "bugs_missed_by_pbt": [],
+    "everything_passes_on_fixed": true
+  }
+}
