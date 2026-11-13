@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hypothesis Banking Demo</title>
+<meta name="description" content="Step-by-step demo: a banking module passes its unit tests, then Hypothesis property-based testing finds all six hidden bugs.">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --text: #1a1a19;
+  --muted: #5f5e5a;
+  --border: #e4e3df;
+  --accent: #2a78d6;
+  --accent-soft: #eaf2fc;
+  --pass: #17834f;
+  --pass-soft: #e5f5ec;
+  --fail: #c93636;
+  --fail-soft: #fbeaea;
+  --term-bg: #17171b;
+  --term-text: #e4e4e7;
+  --term-dim: #8d8d96;
+  --term-pass: #4ec98a;
+  --term-fail: #ff7070;
+  --term-cmd: #8cb8ff;
+  --code-bg: #f1f0ec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121213;
+    --surface: #1c1c1e;
+    --text: #efeeeb;
+    --muted: #a9a8a1;
+    --border: #33332f;
+    --accent: #5b9ef0;
+    --accent-soft: #1d2a3b;
+    --pass: #4ec98a;
+    --pass-soft: #16301f;
+    --fail: #ff7a7a;
+    --fail-soft: #3a1c1c;
+    --term-bg: #0c0c0e;
+    --code-bg: #26262a;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #121213;
+  --surface: #1c1c1e;
+  --text: #efeeeb;
+  --muted: #a9a8a1;
+  --border: #33332f;
+  --accent: #5b9ef0;
+  --accent-soft: #1d2a3b;
+  --pass: #4ec98a;
+  --pass-soft: #16301f;
+  --fail: #ff7a7a;
+  --fail-soft: #3a1c1c;
+  --term-bg: #0c0c0e;
+  --code-bg: #26262a;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+code, pre, .mono { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+header {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.bar {
+  max-width: 1040px; margin: 0 auto; padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.brand { font-weight: 700; font-size: 15px; margin-right: auto; }
+.brand span { color: var(--muted); font-weight: 400; }
+.dots { display: flex; gap: 6px; }
+.dot {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+  font: 600 13px system-ui, sans-serif; cursor: pointer;
+}
+.dot.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.nav { display: flex; gap: 8px; }
+button.btn {
+  font: 600 14px system-ui, sans-serif; padding: 8px 14px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+}
+button.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.btn:disabled { opacity: .4; cursor: default; }
+main { max-width: 1040px; margin: 0 auto; padding: 28px 16px 60px; }
+.eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+h1 { font-size: clamp(26px, 4vw, 38px); line-height: 1.15; margin: 6px 0 12px; }
+h2 { font-size: clamp(22px, 3vw, 30px); line-height: 1.2; margin: 6px 0 10px; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+.lead { font-size: 18px; color: var(--muted); max-width: 760px; margin: 0 0 22px; }
+.grid { display: grid; gap: 16px; }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g2 { grid-template-columns: 1fr 1fr; }
+@media (max-width: 760px) { .g3, .g2 { grid-template-columns: 1fr; } }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+}
+.stat .num { font-size: 40px; font-weight: 800; line-height: 1; }
+.stat .lbl { color: var(--muted); font-size: 14px; margin-top: 6px; }
+.num.pass { color: var(--pass); } .num.fail { color: var(--fail); }
+.term {
+  background: var(--term-bg); color: var(--term-text); border-radius: 12px;
+  padding: 14px 16px; font-size: 13px; line-height: 1.6; overflow-x: auto; margin: 0;
+}
+.term .cmd { color: var(--term-cmd); }
+.term .p { color: var(--term-pass); font-weight: 700; }
+.term .f { color: var(--term-fail); font-weight: 700; }
+.term .d { color: var(--term-dim); }
+.runit {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 18px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 10px;
+  font-size: 13px; color: var(--muted);
+}
+.runit code { color: var(--text); background: var(--code-bg); padding: 3px 6px; border-radius: 5px; word-break: break-all; }
+.copy { font: 600 12px system-ui, sans-serif; padding: 4px 9px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+.badge {
+  display: inline-block; font: 700 11px system-ui, sans-serif; letter-spacing: .04em;
+  padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+}
+.badge.pass { color: var(--pass); background: var(--pass-soft); }
+.badge.fail { color: var(--fail); background: var(--fail-soft); }
+.badge.bug { color: var(--accent); background: var(--accent-soft); }
+details.prop {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px;
+}
+details.prop summary {
+  list-style: none; cursor: pointer; padding: 11px 14px;
+  display: grid; grid-template-columns: 48px 1fr auto auto; gap: 12px; align-items: center;
+}
+details.prop summary::-webkit-details-marker { display: none; }
+details.prop summary .id { font-weight: 700; color: var(--muted); font-size: 13px; }
+details.prop[open] summary { border-bottom: 1px solid var(--border); }
+details.prop .body { padding: 12px 14px 14px; font-size: 14px; }
+@media (max-width: 760px) {
+  details.prop summary { grid-template-columns: 40px 1fr; }
+  details.prop summary .badge { justify-self: start; }
+}
+.ce { background: var(--code-bg); border-radius: 8px; padding: 10px 12px; font-size: 13px; overflow-x: auto; margin: 6px 0; white-space: pre; }
+.k { color: var(--muted); font-size: 13px; }
+.chain { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 4px; }
+.chip { font-size: 13px; padding: 7px 10px; border-radius: 8px; background: var(--code-bg); border: 1px solid var(--border); }
+.chip.bad { background: var(--fail-soft); color: var(--fail); border-color: transparent; font-weight: 600; }
+.arrow { color: var(--muted); }
+.diff { font-size: 13px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.diff div { padding: 7px 10px; white-space: pre-wrap; word-break: break-word; }
+.diff .minus { background: var(--fail-soft); }
+.diff .plus { background: var(--pass-soft); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: 13px; }
+.tablewrap { overflow-x: auto; }
+.bars { display: grid; gap: 10px; }
+.brow { display: grid; grid-template-columns: 150px 1fr 60px; gap: 10px; align-items: center; font-size: 14px; }
+.track { background: var(--code-bg); border-radius: 6px; height: 22px; overflow: hidden; }
+.fill { height: 100%; background: var(--accent); border-radius: 0 6px 6px 0; }
+.brow .v { font-weight: 700; text-align: right; }
+@media (max-width: 560px) { .brow { grid-template-columns: 100px 1fr 48px; font-size: 13px; } }
+.note { font-size: 14px; color: var(--muted); }
+.takeaway { border-left: 4px solid var(--accent); padding: 12px 16px; background: var(--accent-soft); border-radius: 0 10px 10px 0; font-size: 17px; }
+footer { text-align: center; color: var(--muted); font-size: 13px; padding: 0 16px 30px; }
+footer a { color: var(--accent); }
+.hint { color: var(--muted); font-size: 13px; margin-top: 22px; text-align: center; }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="brand">Hypothesis Banking Demo <span>· property-based testing</span></div>
+    <div class="dots" id="dots"></div>
+    <div class="nav">
+      <button class="btn" id="prev">← Back</button>
+      <button class="btn primary" id="next">Next →</button>
+    </div>
+  </div>
+</header>
+<main id="slide"></main>
+<footer id="foot"></footer>
+
+<!-- Filled in by scripts/build_demo_page.py from results/metrics.json - do not edit by hand -->
+<script id="data" type="application/json">{
+ "seed": 12345,
+ "generated_at": "2026-11-13T07:08:44",
+ "env": {
+  "python": "3.14.6",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "pytest": "9.2.0",
+  "hypothesis": "6.170.15"
+ },
+ "bugs": {
+  "BUG-1": "Money is stored as a binary float.",
+  "BUG-2": "withdraw() does not reject negative amounts.",
+  "BUG-3": "The overdraft check compares whole rupees only (int(...)).",
+  "BUG-4": "transfer() to the SAME account creates money.",
+  "BUG-5": "apply_interest() accepts negative rates AND truncates instead of rounding.",
+  "BUG-6": "deposit() accepts zero and negative amounts."
+ },
+ "summary": {
+  "n_bugs": 6,
+  "eb_total": 15,
+  "eb_passed_buggy": 15,
+  "pbt_bugs": 6,
+  "fixed_passed": 26,
+  "fixed_total": 26
+ },
+ "example": [
+  {
+   "name": "test_new_account_has_opening_balance",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_new_account_default_balance_is_zero",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_deposit_increases_balance",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_multiple_deposits_add_up",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_deposit_with_paise",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_withdraw_decreases_balance",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_withdraw_entire_balance",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_withdraw_more_than_balance_raises",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_transfer_moves_money",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_transfer_more_than_balance_raises",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_apply_interest",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_zero_interest_leaves_balance_unchanged",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_bank_total_money",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_bank_total_unchanged_after_transfer",
+   "buggy": "passed",
+   "fixed": "passed"
+  },
+  {
+   "name": "test_duplicate_account_id_raises",
+   "buggy": "passed",
+   "fixed": "passed"
+  }
+ ],
+ "properties": [
+  {
+   "id": "P-01",
+   "name": "test_deposit_then_withdraw_is_round_trip",
+   "description": "Depositing an amount and then withdrawing the same amount leaves the balance exactly where it started.",
+   "strategy": "start = decimals 0.00..10000.00 (2 dp); amount = decimals 0.01..10000.00 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-1"
+     ],
+     "message": "AssertionError: assert 0.009999999999999998 == 0.01",
+     "counterexample": "start=0.01, amount=0.02"
+    }
+   ]
+  },
+  {
+   "id": "P-02",
+   "name": "test_balance_always_has_at_most_two_decimal_places",
+   "description": "After any sequence of deposits the balance has at most 2 decimal places (whole paise).",
+   "strategy": "list of 1-20 deposits, each decimals 0.01..10000.00 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-1"
+     ],
+     "message": "AssertionError: assert 2.0199999999999996 == 2.02",
+     "counterexample": "deposits=[0.01, 2.01]"
+    }
+   ]
+  },
+  {
+   "id": "P-03",
+   "name": "test_deposit_of_zero_or_negative_is_rejected",
+   "description": "Depositing zero or a negative amount always raises ValueError and leaves the balance unchanged.",
+   "strategy": "start = decimals 0.00..10000.00; amount = decimals -10000.00..0.00 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-6"
+     ],
+     "message": "Failed: DID NOT RAISE ValueError",
+     "counterexample": "start=0.00, amount=0.00"
+    }
+   ]
+  },
+  {
+   "id": "P-04",
+   "name": "test_withdraw_of_negative_amount_is_rejected",
+   "description": "Withdrawing a negative amount always raises ValueError and leaves the balance unchanged.",
+   "strategy": "start = decimals 0.00..10000.00; amount = decimals -10000.00..-0.01 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-2"
+     ],
+     "message": "Failed: DID NOT RAISE ValueError",
+     "counterexample": "start=0.00, amount=-0.01"
+    }
+   ]
+  },
+  {
+   "id": "P-05",
+   "name": "test_balance_never_negative_after_withdraw",
+   "description": "After any withdrawal attempt (accepted or rejected) the balance is never negative.",
+   "strategy": "start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00; @example(100, 100)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 300,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-3"
+     ],
+     "message": "AssertionError: assert -0.01 >= 0",
+     "counterexample": "start=0.00, amount=0.01"
+    }
+   ]
+  },
+  {
+   "id": "P-06",
+   "name": "test_overdraft_of_one_rupee_or_more_is_rejected",
+   "description": "Withdrawing at least one rupee more than the balance is always rejected (control property).",
+   "strategy": "start = decimals 0.00..10000.00; extra = decimals 1.00..1000.00; amount = start + extra",
+   "buggy": "passed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": []
+  },
+  {
+   "id": "P-07",
+   "name": "test_interest_never_decreases_balance",
+   "description": "Applying interest at any rate either raises ValueError or never decreases the balance.",
+   "strategy": "start = decimals 0.00..10000.00; rate = decimals -50.00..50.00 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-5"
+     ],
+     "message": "AssertionError: assert 0.36 >= 0.37",
+     "counterexample": "start=0.37, rate=-2.71"
+    }
+   ]
+  },
+  {
+   "id": "P-08",
+   "name": "test_interest_is_rounded_to_nearest_paisa",
+   "description": "Interest added equals balance x rate / 100, rounded half-up to the nearest paisa.",
+   "strategy": "start = decimals 0.00..10000.00; rate = decimals 0.00..50.00 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-5"
+     ],
+     "message": "AssertionError: assert 0.36 == 0.37",
+     "counterexample": "start=0.36, rate=1.39"
+    }
+   ]
+  },
+  {
+   "id": "P-09",
+   "name": "test_transfer_conserves_total_money",
+   "description": "Any transfer between any two accounts in the bank never changes the bank's total money.",
+   "strategy": "3 balances (decimals 0.00..10000.00); sender/receiver = integers 0..2 (may be equal); amount = decimals 0.01..10000.00",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-4"
+     ],
+     "message": "AssertionError: assert 0.02 == 0.01",
+     "counterexample": "balances=[0.00, 0.00, 0.01], sender=2, receiver=2, amount=0.01"
+    }
+   ]
+  },
+  {
+   "id": "P-10",
+   "name": "test_transfer_to_self_leaves_balance_unchanged",
+   "description": "Transferring money from an account to itself never changes its balance.",
+   "strategy": "start = decimals 0.00..10000.00; amount = decimals 0.01..10000.00 (2 dp)",
+   "buggy": "failed",
+   "fixed": "passed",
+   "examples_fixed": 200,
+   "failures": [
+    {
+     "bugs": [
+      "BUG-4"
+     ],
+     "message": "AssertionError: assert 0.02 == 0.01",
+     "counterexample": "start=0.01, amount=0.01"
+    }
+   ]
+  }
+ ],
+ "highlight": {
+  "description": "After any withdrawal attempt (accepted or rejected) the balance is never negative.",
+  "human_example": "start=100.00, amount=100.00",
+  "counterexample": "start=0.00, amount=0.01",
+  "message": "AssertionError: assert -0.01 >= 0",
+  "generated": 10,
+  "buggy_line": "if int(amount) > int(self.balance):",
+  "fixed_line": "if amount > self.balance:"
+ },
+ "stateful": {
+  "programs": 200,
+  "max_steps": 20,
+  "failures": [
+   {
+    "bugs": [
+     "BUG-1"
+    ],
+    "message": "total-money-conserved violated: bank has 3.0199999999999996, expected 3.02",
+    "steps": [
+     "deposit('ACC1', 0.01)",
+     "deposit('ACC0', 3.01)"
+    ]
+   },
+   {
+    "bugs": [
+     "BUG-1"
+    ],
+    "message": "balance-matches-model violated: ACC0 has 3.0199999999999996, expected 3.02",
+    "steps": [
+     "deposit('ACC0', 0.01)",
+     "deposit('ACC0', 3.01)"
+    ]
+   },
+   {
+    "bugs": [
+     "BUG-3"
+    ],
+    "message": "no-negative-balance violated: ACC0 = -0.01",
+    "steps": [
+     "withdraw('ACC0', 0.01)"
+    ]
+   }
+  ]
+ },
+ "suites": [
+  {
+   "key": "example_based",
+   "label": "Example-based",
+   "file": "tests/test_example_based.py",
+   "fixed_passed": 15,
+   "bugs_buggy": 0,
+   "cases_fixed": 15
+  },
+  {
+   "key": "property_based",
+   "label": "Property-based",
+   "file": "tests/test_property_based.py",
+   "fixed_passed": 10,
+   "bugs_buggy": 6,
+   "cases_fixed": 2100
+  },
+  {
+   "key": "stateful",
+   "label": "Stateful",
+   "file": "tests/test_stateful.py",
+   "fixed_passed": 1,
+   "bugs_buggy": 2,
+   "cases_fixed": 200
+  }
+ ],
+ "fixes": [
+  {
+   "bug": "BUG-1",
+   "buggy": "self.balance = float(balance)",
+   "fixed": "return to_decimal(value).quantize(CENT, rounding=ROUND_HALF_UP)"
+  },
+  {
+   "bug": "BUG-2",
+   "buggy": "# BUG-2: no check for a negative amount",
+   "fixed": "raise ValueError(\"Withdrawal amount must be positive\")"
+  },
+  {
+   "bug": "BUG-3",
+   "buggy": "if int(amount) > int(self.balance):",
+   "fixed": "if amount > self.balance:"
+  },
+  {
+   "bug": "BUG-4",
+   "buggy": "new_to_balance = to_account.balance + amount",
+   "fixed": "if to_account is self:"
+  },
+  {
+   "bug": "BUG-5",
+   "buggy": "interest = int(self.balance * rate) / 100",
+   "fixed": "interest = (self.balance * rate / 100).quantize(CENT, rounding=ROUND_HALF_UP)"
+  },
+  {
+   "bug": "BUG-6",
+   "buggy": "# BUG-6: no check that the amount is positive",
+   "fixed": "raise ValueError(\"Deposit amount must be positive\")"
+  }
+ ]
+}</script>
+
+<script>
+const D = JSON.parse(document.getElementById("data").textContent);
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const badge = status => status === "passed"
+  ? '<span class="badge pass">✓ PASSED</span>'
+  : '<span class="badge fail">✗ FAILED</span>';
+const bugTags = bugs => bugs.map(b => `<span class="badge bug">${esc(b)}</span>`).join(" ");
+const runIt = cmd => `<div class="runit">Run it yourself:<code>${esc(cmd)}</code><button class="copy" data-copy="${esc(cmd)}">Copy</button></div>`;
+const term = (cmd, lines) => `<pre class="term"><span class="cmd">PS&gt; ${esc(cmd)}</span>\n${lines.join("\n")}</pre>`;
+
+const SEED = D.seed;
+const CMD = {
+  example: `$env:BANK_VERSION="buggy"; pytest tests/test_example_based.py -v`,
+  props: `pytest tests/test_property_based.py --hypothesis-seed=${SEED} --tb=short -q`,
+  one: `pytest tests/test_property_based.py::test_balance_never_negative_after_withdraw --hypothesis-seed=${SEED} --tb=short`,
+  stateful: `pytest tests/test_stateful.py --hypothesis-seed=${SEED} --tb=short`,
+  fixed: `$env:BANK_VERSION="fixed"; pytest -v`,
+};
+
+function intro() {
+  const s = D.summary;
+  return `
+  <div class="eyebrow">Software Testing · Course Project</div>
+  <h1>A banking module that passes all its tests and still has ${s.n_bugs} bugs</h1>
+  <p class="lead">Example-based tests only check the inputs we think of. <b>Property-based testing</b> states rules
+  the code must <i>always</i> follow, and <b>Hypothesis</b> generates hundreds of inputs to break them. When it finds
+  a failure, it <b>shrinks</b> it to the simplest failing input.</p>
+  <div class="grid g3">
+    <div class="card stat"><div class="num pass">${s.eb_passed_buggy}/${s.eb_total}</div>
+      <div class="lbl">hand-written unit tests <b>pass</b> on the buggy code</div></div>
+    <div class="card stat"><div class="num fail">${s.pbt_bugs}/${s.n_bugs}</div>
+      <div class="lbl">seeded bugs <b>found</b> by Hypothesis</div></div>
+    <div class="card stat"><div class="num pass">${s.fixed_passed}/${s.fixed_total}</div>
+      <div class="lbl">tests pass after fixing the bugs</div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3>The six hidden bugs</h3>
+    <div class="tablewrap"><table>
+      ${Object.entries(D.bugs).map(([id, t]) => `<tr><td style="width:80px">${bugTags([id])}</td><td>${esc(t)}</td></tr>`).join("")}
+    </table></div>
+  </div>
+  <p class="hint">Use the <b>Next</b> button or the ← → arrow keys.</p>`;
+}
+
+function step1() {
+  const lines = D.example.map(t =>
+    `<span class="d">tests/test_example_based.py::</span>${esc(t.name)} ${t.buggy === "passed" ? '<span class="p">PASSED</span>' : '<span class="f">FAILED</span>'}`);
+  const passed = D.example.filter(t => t.buggy === "passed").length;
+  lines.push("", `<span class="p">========== ${passed} passed ==========</span>`);
+  return `
+  <div class="eyebrow">Step 1 of 5 · Buggy version</div>
+  <h2>The code passes all its unit tests</h2>
+  <p class="lead">These are ${D.example.length} normal PyTest tests: deposit 100, withdraw 50, transfer 30, 5% interest on 1000…
+  Every one passes. By normal standards, this code is done.</p>
+  ${term("pytest tests/test_example_based.py -v", lines)}
+  <p class="note">But the code has ${D.summary.n_bugs} bugs. These tests only use “nice” inputs like 100 and 50, so they never hit them.</p>
+  ${runIt(CMD.example)}`;
+}
+
+function propRow(p) {
+  const f = p.failures[0];
+  const body = f
+    ? `<div class="k">Hypothesis’s shrunk (simplest) failing input:</div>
+       <div class="ce">${esc(f.counterexample)}</div>
+       <div class="k">Error:</div><div class="ce">${esc(f.message)}</div>
+       <div class="k">Strategy: ${esc(p.strategy)}</div>`
+    : `<div class="k">${p.id === "P-06" ? "Control property: written to pass on both versions, to show properties don’t just fail by default." : ""}</div>
+       <div class="k">Strategy: ${esc(p.strategy)} · ${p.examples_fixed} inputs tried</div>`;
+  return `<details class="prop">
+    <summary><span class="id">${p.id}</span><span>${esc(p.description)}</span>
+      <span>${bugTags(f ? f.bugs : [])}</span>${badge(p.buggy)}</summary>
+    <div class="body">${body}</div></details>`;
+}
+
+function step2() {
+  const failed = D.properties.filter(p => p.buggy === "failed").length;
+  return `
+  <div class="eyebrow">Step 2 of 5 · Buggy version</div>
+  <h2>Hypothesis tries to break the rules: ${failed} of ${D.properties.length} fail</h2>
+  <p class="lead">Each property is a rule in plain English. Hypothesis generated the inputs itself.
+  <b>Click any row</b> to see the simplest input that breaks the rule.</p>
+  ${D.properties.map(propRow).join("")}
+  ${runIt(CMD.props)}`;
+}
+
+function step3() {
+  const h = D.highlight;
+  return `
+  <div class="eyebrow">Step 3 of 5 · Zoom in on one bug</div>
+  <h2>Shrinking: the simplest input that fails</h2>
+  <p class="lead">Rule: <i>“${esc(h.description)}”</i></p>
+  <div class="grid g3">
+    <div class="card"><h3>What a human tests</h3>
+      <div class="ce">${esc(h.human_example)}</div>
+      <span class="badge pass">✓ PASSED</span>
+      <p class="note">The usual boundary: withdraw exactly the balance. Pinned with <code>@example</code>.</p></div>
+    <div class="card"><h3>What Hypothesis found</h3>
+      <div class="ce">${esc(h.counterexample)}</div>
+      <span class="badge fail">✗ FAILED</span>
+      <p class="note">${esc(h.message)}</p></div>
+    <div class="card"><h3>Why</h3>
+      <div class="diff"><div class="minus mono">- ${esc(h.buggy_line)}</div><div class="plus mono">+ ${esc(h.fixed_line)}</div></div>
+      <p class="note">The buggy check compares whole rupees only, so overdrawing by under ₹1 slips through.</p></div>
+  </div>
+  <div class="takeaway" style="margin-top:18px">Hypothesis didn’t know where the bug was. It found it within
+  ${h.generated} generated inputs, then simplified it to the smallest numbers possible: one paisa.</div>
+  ${runIt(CMD.one)}`;
+}
+
+function step4() {
+  const s = D.stateful;
+  const chains = s.failures.map(f => `
+    <div class="card" style="margin-bottom:10px">
+      <div style="margin-bottom:4px">${bugTags(f.bugs)}</div>
+      <div class="chain">
+        <span class="chip mono">BankMachine()</span>
+        ${f.steps.map(st => `<span class="arrow">→</span><span class="chip mono">${esc(st)}</span>`).join("")}
+        <span class="arrow">→</span><span class="chip bad">✗ ${esc(f.message)}</span>
+      </div>
+    </div>`).join("");
+  return `
+  <div class="eyebrow">Step 4 of 5 · Stateful testing</div>
+  <h2>Random sequences of operations, shrunk to 1–2 steps</h2>
+  <p class="lead">A state machine runs ${s.programs} random programs of up to ${s.max_steps} steps (deposits, withdrawals,
+  transfers) on 3 accounts, and checks after <b>every</b> step: no negative balance, total money conserved,
+  balances match the expected model. On the buggy version it reported ${s.failures.length} distinct failures:</p>
+  ${chains}
+  <p class="note">The state machine missed BUG-4 (self-transfer). It breaks the same “total money” check as the float
+  bug, and Hypothesis reports one failure per check. The self-transfer property (P-10) catches it directly.</p>
+  ${runIt(CMD.stateful)}`;
+}
+
+function step5() {
+  const lines = D.suites.map(s =>
+    `<span class="d">${esc(s.file)}</span>  ${".".repeat(Math.max(3, 34 - s.file.length))} <span class="p">${s.fixed_passed} passed</span>`);
+  const total = D.suites.reduce((a, s) => a + s.fixed_passed, 0);
+  lines.push("", `<span class="p">========== ${total} passed ==========</span>`);
+  return `
+  <div class="eyebrow">Step 5 of 5 · Fixed version</div>
+  <h2>Fix the bugs and everything passes</h2>
+  <p class="lead">The fixed module has the same API. It uses <code>Decimal</code> for money and rejects invalid input with
+  <code>ValueError</code>. The same unchanged tests now all pass.</p>
+  ${term("$env:BANK_VERSION=\"fixed\"; pytest -v", lines)}
+  <div class="card" style="margin-top:16px"><h3>Each bug, one line</h3><div class="tablewrap"><table>
+    <tr><th>Bug</th><th>Buggy code</th><th>Fixed code</th></tr>
+    ${D.fixes.map(f => `<tr><td>${bugTags([f.bug])}</td><td class="mono" style="font-size:13px">${esc(f.buggy)}</td><td class="mono" style="font-size:13px">${esc(f.fixed)}</td></tr>`).join("")}
+  </table></div></div>
+  ${runIt(CMD.fixed)}`;
+}
+
+function bars(rows, max) {
+  return `<div class="bars">${rows.map(([label, v]) => `
+    <div class="brow"><span>${esc(label)}</span>
+      <div class="track"><div class="fill" style="width:${max ? (v / max) * 100 : 0}%"></div></div>
+      <span class="v">${v.toLocaleString()}</span></div>`).join("")}</div>`;
+}
+
+function results() {
+  const s = D.summary;
+  const bugRows = D.suites.map(x => [x.label, x.bugs_buggy]);
+  const caseRows = D.suites.map(x => [x.label, x.cases_fixed]);
+  return `
+  <div class="eyebrow">Results · seed ${SEED}</div>
+  <h2>Same code, very different verdicts</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Seeded bugs detected (of ${s.n_bugs})</h3>${bars(bugRows, s.n_bugs)}</div>
+    <div class="card"><h3>Test cases executed (fixed version)</h3>${bars(caseRows, Math.max(...caseRows.map(r => r[1])))}
+      <p class="note" style="margin-bottom:0">Stateful counts whole random programs (each up to ${D.stateful.max_steps} steps).</p></div>
+  </div>
+  <div class="takeaway" style="margin-top:18px">Passing tests only prove the code works for the inputs you tried.
+  Property-based testing lets the machine search for the inputs you didn’t think of, and it works best
+  <b>alongside</b> normal example tests.</div>`;
+}
+
+const slides = [
+  ["Intro", intro], ["1", step1], ["2", step2], ["3", step3], ["4", step4], ["5", step5], ["Results", results],
+];
+let current = 0;
+
+function show(i) {
+  current = Math.max(0, Math.min(slides.length - 1, i));
+  document.getElementById("slide").innerHTML = slides[current][1]();
+  document.querySelectorAll(".dot").forEach((d, j) => d.classList.toggle("active", j === current));
+  document.getElementById("prev").disabled = current === 0;
+  document.getElementById("next").disabled = current === slides.length - 1;
+  try { history.replaceState(null, "", "#" + current); } catch (e) {}
+  window.scrollTo(0, 0);
+}
+
+document.getElementById("dots").innerHTML = slides.map(([label], i) =>
+  `<button class="dot" title="${label}" aria-label="Go to ${label}" data-i="${i}">${i === 0 ? "i" : i === slides.length - 1 ? "★" : label}</button>`).join("");
+document.getElementById("dots").addEventListener("click", e => { if (e.target.dataset.i) show(+e.target.dataset.i); });
+document.getElementById("prev").onclick = () => show(current - 1);
+document.getElementById("next").onclick = () => show(current + 1);
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") show(current + 1);
+  if (e.key === "ArrowLeft") show(current - 1);
+});
+document.addEventListener("click", e => {
+  const text = e.target.dataset && e.target.dataset.copy;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => { e.target.textContent = "Copied"; setTimeout(() => e.target.textContent = "Copy", 1200); },
+                                          () => { e.target.textContent = "Select & copy"; });
+});
+document.getElementById("foot").innerHTML =
+  `All results are from a real run (seed ${SEED}, ${esc(D.generated_at)}, Python ${esc(D.env.python)}, Hypothesis ${esc(D.env.hypothesis)}). ` +
+  `<a href="https://github.com/rishitudikeri3-rgb/hypothesis-banking-pbt">Source on GitHub</a>`;
+show(parseInt(location.hash.slice(1)) || 0);
+</script>
+</body>
+</html>

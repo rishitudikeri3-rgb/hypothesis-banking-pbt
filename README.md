@@ -13,6 +13,7 @@ passes all 15 hand-written PyTest tests while hiding 6 bugs, and Hypothesis find
 
 ![Bugs detected per suite](results/chart1_bugs_detected.png)
 
+- **▶ Interactive demo (opens in the browser):** https://rishitudikeri3-rgb.github.io/hypothesis-banking-pbt/ (offline: double-click `docs/index.html`)
 - **Full report:** [`report/Software_Testing_Project_Report.docx`](report/Software_Testing_Project_Report.docx)
 - **Presentation notes** (results, 2-minute script, code walkthrough, viva Q&A): [`docs/PRESENTATION_NOTES.md`](docs/PRESENTATION_NOTES.md)
 - **Raw results:** [`results/metrics.json`](results/metrics.json) and the `results/*.txt` pytest outputs
@@ -23,6 +24,7 @@ passes all 15 hand-written PyTest tests while hiding 6 bugs, and Hypothesis find
 property-based-testing-project/
 ├── README.md
 ├── docs/
+│   ├── index.html             # interactive step-by-step demo page (GitHub Pages)
 │   └── PRESENTATION_NOTES.md  # results summary, 2-minute script, code walkthrough, viva Q&A
 ├── requirements.txt
 ├── pytest.ini                 # tells pytest to look in src/ for `import bank`
@@ -37,7 +39,8 @@ property-based-testing-project/
 │   └── test_stateful.py       # 1 RuleBasedStateMachine (random sequences of operations)
 ├── scripts/
 │   ├── run_experiment.py      # runs 3 suites x 2 versions -> results/*.txt, *.xml, metrics.json
-│   └── make_charts.py         # results/metrics.json -> results/*.png
+│   ├── make_charts.py         # results/metrics.json -> results/*.png
+│   └── build_demo_page.py     # results/metrics.json -> data inside docs/index.html
 ├── results/                   # raw outputs, metrics.json, charts
 └── report/
     ├── build_report.py        # results/ + src/ -> the .docx report
@@ -84,6 +87,7 @@ counterexamples as in the report.
 python scripts/run_experiment.py      # ~10 s; writes results/*.txt, results/*.xml, results/metrics.json
 python scripts/make_charts.py         # writes results/chart1..4 and workflow.png
 python report/build_report.py         # writes report/Software_Testing_Project_Report.docx
+python scripts/build_demo_page.py     # refreshes the data in docs/index.html
 ```
 
 Every number, table and counterexample in the report is read from `results/metrics.json`, so the report always
@@ -96,6 +100,8 @@ everything_passes_on_fixed: True
 ```
 
 ## How to demo this live in class (about 5 minutes)
+
+**Easiest option:** open the [interactive demo](https://rishitudikeri3-rgb.github.io/hypothesis-banking-pbt/) and click **Next** (or press →) through the 5 steps. It shows the real results of the run. Use the terminal commands below if you want to run the tests live as well.
 
 Open a terminal in the project folder with the venv activated, then run these in order.
 
